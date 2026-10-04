@@ -13,8 +13,6 @@ WORDS='hold =|vault|bible|scripture|jesus|christ|gospel|church|psalm|genesis|tes
 "$BT/aapt2" dump strings "$APK" > "$TMP/res.txt"
 pkg=$("$BT/aapt2" dump packagename "$APK")
 echo "package: $pkg"
-# The direct edition must not name the play edition either (its name leads to the Play listing).
-[ "$pkg" = com.tbce.calc ] && WORDS="$WORDS|kanaiic"
 # The dictionary's word data (assets/w) is an ordinary English dictionary, which naturally
 # defines words like "church"; it is decoy content and skipped here. Everything else is checked:
 # manifest and resources, plus every string in dex and other files, and the file names.

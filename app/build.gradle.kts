@@ -21,20 +21,20 @@ android {
     defaultConfig {
         minSdk = 24
         targetSdk = 36
-        versionCode = 14
-        versionName = "1.5.0"
+        versionCode = 15
+        versionName = "1.6.0"
     }
 
-    // Two editions from one codebase. Their application ids
-    // must stay different: a disguised direct install must never point at the public Play listing.
+    // Two editions from one codebase. They behave the same; only the application id differs,
+    // and it must: a disguised direct install must never point at the public Play listing.
     flavorDimensions += "edition"
     productFlavors {
-        // GitHub / kanaiic.com. Starts as the reference app; no undisguised face.
+        // GitHub / kanaiic.com. Its id appears on no store.
         create("direct") {
             dimension = "edition"
             applicationId = "com.tbce.calc"
         }
-        // Google Play, as Kanaiic Reader. Starts undisguised; disguises optional (src/play).
+        // Google Play. Its id leads to the public listing, which describes the disguise.
         create("play") {
             dimension = "edition"
             applicationId = "com.kanaiic.reader"

@@ -6,13 +6,19 @@ no internet connection, ever.
 
 ## Two versions
 
-- **Kanaiic Reader** (from Google Play) opens as itself: its own name and icon, and a plain
-  screen asking for your code. You can switch it to the dictionary disguise in Settings, but
-  the app's Play Store page describes the disguise, and anyone who looks at the app's details
-  on the phone can find that page. Its disguise hides the app from a glance, not from a search.
-- **The direct version** (downloaded from kanaiic.com or GitHub) is always disguised. It
-  starts as a dictionary, and it is not on any app store, so its details lead nowhere. If
-  being found with a Bible app could put you in danger, use this one.
+Both versions work the same way. They open as **Kanaiic Reader**, with its own name and icon
+and a plain screen asking for your code, and in Settings you can make the app look like a
+dictionary instead. They differ only in where they come from:
+
+- **From Google Play.** The app's Play Store page describes the dictionary disguise, and
+  anyone who looks at the app's details on the phone can find that page.
+- **Direct** (downloaded from kanaiic.com or GitHub). It is not on any app store, so its
+  details lead nowhere. If being found with a Bible app could put you in danger, use this
+  one, and switch to the dictionary right after setting your code.
+
+On both, the phone's app settings (Settings > Apps) always list the app as "Kanaiic Reader",
+even while it looks like a dictionary. The disguise hides the app from a glance at the home
+screen and app list, not from someone who checks the app's details.
 
 Please read the section "What it does not protect against" before you rely on it. In some
 places, being found with a hidden Bible app is more dangerous than being found with no Bible
@@ -30,9 +36,9 @@ app at all. Only you can weigh that.
 
 ## Setting up your code
 
-1. Open the app. Kanaiic Reader asks you to choose a code straight away. The direct version
-   opens as a dictionary: hold **Search** for about two seconds and a setup screen opens.
-   (This only happens once, before a code exists.)
+1. Open the app. It asks you to choose a code straight away. (If you updated from a version
+   that started as a dictionary and never set a code, hold **Search** for about two seconds
+   and the setup screen opens.)
 2. Type a code of at least 6 digits, then the same code again. 8 or more digits is much
    better. Do not use your phone PIN, a birthday, or something like 123456.
 
@@ -41,7 +47,7 @@ made the app. If you forget it, everything inside is gone. Make a backup (see be
 
 ## Opening and closing
 
-Kanaiic Reader: type your code on the number pad and tap **Open**.
+As Kanaiic Reader: type your code on the number pad and tap **Open**.
 
 As a dictionary, the way in is hidden in the **Search** button: hold it for about two seconds
 (the search box clears), type your code in the box, then hold **Search** again. A normal tap
@@ -91,14 +97,14 @@ Highlights and notes belong to the verse, so they show in every translation.
 
 ## Changing how it looks
 
-The direct version is always the dictionary. On Kanaiic Reader, Settings > Disguise switches
-between the app's own name and icon and the dictionary; the icon and name change straight
-away, and the app returns to the home screen. The reader, your code and everything inside stay
+Settings > Disguise switches between the app's own name and icon and the dictionary; the icon
+and name change straight away, and the app returns to the home screen. The reader, your code and everything inside stay
 the same, and the screen reminds you of the way in when you switch.
 
 Earlier versions also offered a calculator, notepad, clock and sudoku game. They were removed
 in version 1.5: a disguise someone knows about is easy to recognise, so each extra one was a
-weak point. If your phone used one of them, the update turns it into the dictionary. Your code
+weak point. If your phone used one of them, the update turns it into the dictionary.
+Updating never undoes a disguise: a phone that looks like a dictionary keeps looking like one. Your code
 and everything inside stay the same; open it by holding **Search** as described above.
 
 ## Backups

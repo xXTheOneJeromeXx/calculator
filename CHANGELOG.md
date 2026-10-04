@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.0 (2026-10-04): both versions work the same way
+
+- The direct version (`dictionary.apk`) now works exactly like Kanaiic Reader from Google
+  Play: a new install opens as **Kanaiic Reader** with a plain code screen, and Settings >
+  Disguise turns it into the dictionary. Before, the direct version could only ever be the
+  dictionary.
+- Phones that already look like a dictionary stay that way after updating; nothing changes
+  for them.
+- On both versions the phone's app settings list the app as "Kanaiic Reader", even while it
+  looks like a dictionary. If you need the disguise, switch to it right after setting your
+  code.
+
 ## 1.5.0 (2026-10-04): the dictionary is the only disguise
 
 - The calculator, notepad, clock and sudoku disguises are gone. Every disguise someone has

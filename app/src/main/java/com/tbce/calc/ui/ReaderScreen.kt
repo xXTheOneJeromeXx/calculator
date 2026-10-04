@@ -717,7 +717,7 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
                 modifier = Modifier.fillMaxWidth().clickable { state.switchTranslation(t.id) }.padding(vertical = 10.dp),
             )
         }
-        // Only the play edition has a choice (its own face or the Dictionary); the direct edition is always the Dictionary.
+        // The app's own face or the Dictionary (both editions have both).
         val faces = remember { Disguises.available(context).map { it to Disguises.label(context, it) } }
         if (faces.size > 1) {
             Spacer(Modifier.height(16.dp))

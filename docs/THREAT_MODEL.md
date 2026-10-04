@@ -21,17 +21,19 @@ the original design brief (sections 2, 4, 5, 6 and 9).
 
 ### Disguise
 
-- Two editions (build flavors). **direct** (`com.tbce.calc`, GitHub / kanaiic.com) starts as
-  a working reference app (WordNet 3.0 dictionary and thesaurus, plus a notepad tab) and has
-  no undisguised face; **play** (`com.kanaiic.reader`) starts as "Kanaiic Reader" with a plain
-  code pad, and offers the Dictionary as its one disguise. The play-only face, label and icon live in
-  `src/play/`, so the direct APK never contains the name; `scan_apk.sh` checks that.
+- Two editions (build flavors) that behave identically since 1.6: **direct**
+  (`com.tbce.calc`, GitHub / kanaiic.com) and **play** (`com.kanaiic.reader`). Both start as "Kanaiic Reader" with a plain code pad and offer the
+  Dictionary (a working WordNet 3.0 dictionary and thesaurus, plus a notepad tab) as the one
+  disguise. Only the application id differs. Until 1.5 the direct edition started as the
+  Dictionary, had no undisguised face and never contained the name "Kanaiic"; it now does.
 - One disguise: the Dictionary. Calculator, Notes, Clock and Sudoku (1.0–1.4) were removed in
   1.5: each extra face was another known pattern a searcher could
   recognise, and its leftovers (a saved Sudoku game, the face preference) were evidence of
-  switching. An install on a removed face moves to the default face on update
-  (`UpdateReceiver` on MY_PACKAGE_REPLACED, plus the same check on launch), which re-enables
-  the default alias and deletes the Sudoku save.
+  switching. An install that was disguised stays disguised on update (`UpdateReceiver` on
+  MY_PACKAGE_REPLACED, plus the same check on launch): a removed face, or a pre-1.3 vault with
+  no stored face, moves to the Dictionary, every alias is set explicitly (FaceReader is the
+  manifest default since 1.6), and the Sudoku save is deleted. The launcher can show the
+  manifest default for up to about a second after an update, before the receiver runs.
 - Hidden gesture (brief section 4, adapted from the calculator's `=` to the Dictionary's
   Search button): hold Search to arm (the box clears), type the code in the box, hold Search
   again to submit. Typing a non-digit, 15 s, or backgrounding silently disarms; the box clears
@@ -43,7 +45,7 @@ the original design brief (sections 2, 4, 5, 6 and 9).
 - Scripture, book names, reader words that name the content, setup/code-screen wording, the
   font, the licenses and the user guide ship inside AES-256-GCM packs under opaque names.
   R8 renames and repackages classes. `tools/scan_apk.sh` (run in CI on both editions) fails
-  the build on religious terms, "vault", "hold =", "kanaiic" (direct only), any permission,
+  the build on religious terms, "vault", "hold =", any permission,
   backups, or extra exported components. It skips the dictionary's word data (`assets/w`),
   an ordinary English dictionary that naturally defines words like "church".
 
@@ -117,19 +119,20 @@ c0         = version | salt | m | t | p | GCM_KEK_device( GCM_KEK_code( DEK ) )
 8. **Updater tell.** An updater such as Obtainium shows where the app came from.
 9. **Single annotation document.** All notes are one encrypted item rewritten on every
    change; fine now, slow for very large note collections.
-10. **Disguise.** The launcher face is an activity-alias (direct: Dictionary only; play: its
-    own face and the Dictionary). The enabled alias, the face preference and the notepad's
-    own (non-secret) notes are visible to the system and in a storage image. On direct the
-    manifest has one launcher alias pointing at a non-launcher activity, which an examiner
-    may still find unusual. Switching faces (play only) briefly sends the app to the home
-    screen. The application label in system settings is fixed per edition ("Dictionary" on
-    direct, "Kanaiic Reader" on play) whichever face is chosen.
+10. **Disguise.** The launcher face is an activity-alias (the app's own face and the
+    Dictionary, on both editions). The enabled alias, the face preference and the notepad's
+    own (non-secret) notes are visible to the system and in a storage image, and the manifest
+    and resources of either APK name "Kanaiic Reader". Switching faces briefly sends the app to
+    the home screen. The application label in system settings is "Kanaiic Reader" on both
+    editions whichever face is chosen, so App info reveals the real name; a fresh install
+    shows the undisguised face until the user switches.
 11. **Forensic self-test not done.** Brief section 12 asks for a full-storage image after use
     to confirm nothing readable remains (including keyboard dictionaries).
 12. **Play edition is traceable.** Its package id leads to a public listing that describes
     the disguise, and Play keeps an install record in the user's Google account. Its
     disguise only hides the app from a glance. The user guide says so and points people at
-    risk to the direct edition, whose id appears on no store.
+    risk to the direct edition, whose id appears on no store (though its App info label and
+    APK now carry the same name).
 
 ## Suggested review scope
 

@@ -14,7 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** FRONT is the visible, locked front screen of whichever face is active (dictionary, or the play edition's own). */
+/** FRONT is the visible, locked front screen of whichever face is active (the app's own, or the dictionary). */
 enum class Screen { FRONT, SETUP, INSIDE }
 
 /** [ui] is the wording from the encrypted pack, used by the setup and code screens. */

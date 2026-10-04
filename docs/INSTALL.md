@@ -3,9 +3,9 @@
 This takes about two minutes. You only do it once; you do not need a Google account,
 internet after installing, or any other app.
 
-This is the version that is not on any app store. It installs as a dictionary called
-"Dictionary", and the steps below only ever say that. Whoever gave you the link will tell you
-what else it does. (Kanaiic Reader, the Play Store version, installs like any other app.)
+This is the version that is not on any app store. It works the same as the Play Store
+version: it installs as **Kanaiic Reader**, and you can make it look like a dictionary in its
+settings. (The Play Store version installs like any other app.)
 
 ## 1. Download
 
@@ -33,7 +33,8 @@ what else it does. (Kanaiic Reader, the Play Store version, installs like any ot
 9. If **Google Play Protect** shows a warning, tap **More details** (or the small arrow),
    then **Install anyway**. If it offers to **scan** the app, you can let it; then install.
 10. Tap **Open** or **Done**. The app is now on your home screen or in your app list as
-    **Dictionary**.
+    **Kanaiic Reader**. Open it, choose your code, and if you want it to look like a
+    dictionary, go to **Settings > Disguise > Dictionary** (see the user guide).
 
 ## 5. Tidy up (important)
 
@@ -45,13 +46,13 @@ what else it does. (Kanaiic Reader, the Play Store version, installs like any ot
 ## Updates
 
 New versions are installed the same way, over the top. Your code and notes stay, and so does
-the disguise you chose. Version 1.5 removed the calculator, notepad, clock and sudoku
+the disguise you chose: a phone that looks like a dictionary keeps looking like one. Version 1.5 removed the calculator, notepad, clock and sudoku
 disguises: if your phone used one, the update turns it into the dictionary (hold **Search**,
 type your code, hold **Search** again).
 
 ## If something goes wrong
 
-- **"App not installed"**: there is not enough space, or a different app named Dictionary
+- **"App not installed"**: there is not enough space, or a different copy of the app
   from another source is in the way. Free some space and try again.
 - **"Install blocked" with no Install anyway button**: ask the person who gave you the link.
   (The app is registered with Android developer verification, so no extra developer

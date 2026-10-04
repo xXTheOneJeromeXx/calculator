@@ -33,7 +33,7 @@ import com.tbce.calc.Disguise
 import com.tbce.calc.Disguises
 
 /**
- * The play edition's undisguised front screen: the app's own name, and a plain code pad to open
+ * The app's own (undisguised) front screen: the app's own name, and a plain code pad to open
  * it. No hidden gesture. On a fresh install it offers to choose a code first.
  */
 @Composable

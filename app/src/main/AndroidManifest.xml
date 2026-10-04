@@ -15,17 +15,18 @@
         android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:hasFragileUserData="false"
-        android:icon="@drawable/ic_dictionary"
-        android:roundIcon="@drawable/ic_dictionary"
-        android:label="@string/label_dictionary"
+        android:icon="@drawable/ic_reader"
+        android:roundIcon="@drawable/ic_reader"
+        android:label="@string/label_reader"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
 
-        <!-- The real activity. Not a launcher itself; each disguise is an activity-alias below.
-             Exactly one alias is enabled at a time, so only one icon and name ever show. The
-             enabled one here is the direct edition's default face (the reference app); the play
-             edition's manifest (src/play) swaps in its own undisguised face. -->
+        <!-- The real activity. Not a launcher itself; each face is an activity-alias below.
+             Exactly one alias is enabled at a time, so only one icon and name ever show. Both
+             editions start as the app's own face (FaceReader); the Dictionary disguise is chosen
+             in Settings. The application label above (shown in Settings > Apps) can't follow the
+             face. -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -34,10 +35,24 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity-alias
-            android:name=".FaceDictionary"
+            android:name=".FaceReader"
             android:targetActivity=".MainActivity"
             android:exported="true"
             android:enabled="true"
+            android:icon="@drawable/ic_reader"
+            android:roundIcon="@drawable/ic_reader"
+            android:label="@string/label_reader">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".FaceDictionary"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:enabled="false"
             android:icon="@drawable/ic_dictionary"
             android:roundIcon="@drawable/ic_dictionary"
             android:label="@string/label_dictionary">
@@ -47,13 +62,9 @@
             </intent-filter>
         </activity-alias>
 
-
-
-
-
-        <!-- After an update, moves an install whose face was removed in 1.5 (Calculator, Notes,
-             Clock, Sudoku) to the default face (see UpdateReceiver). Not exported: the system
-             delivers this broadcast to the app itself. -->
+        <!-- After an update, keeps a disguised install disguised before it is next opened: it
+             re-applies the chosen face, and moves a face removed in 1.5 to the Dictionary (see
+             UpdateReceiver). Not exported: the system delivers this broadcast to the app itself. -->
         <receiver
             android:name=".UpdateReceiver"
             android:exported="false">

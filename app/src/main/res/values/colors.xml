@@ -1,4 +1,5 @@
 <resources>
     <color name="icon_bg">#FF2F5F8F</color>
+    <color name="icon_bg_reader">#FF1F6F78</color>
     <color name="icon_bg_dictionary">#FF3D5A80</color>
 </resources>

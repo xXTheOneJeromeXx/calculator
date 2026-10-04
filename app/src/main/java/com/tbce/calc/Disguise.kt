@@ -3,12 +3,12 @@ package com.tbce.calc
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
+import com.tbce.calc.vault.KeyVault
 
 /**
  * A launcher face: the icon and name the app shows, and the front screen behind it. READER is the
- * undisguised face and exists only in the play edition's manifest (see [Disguises.available]).
- * The first face an edition has is its default: READER on play, DICTIONARY (the reference app)
- * on direct. Keep the manifests' enabled aliases in step with that.
+ * app's own face and DICTIONARY the disguise. Both editions have both; a fresh install starts on
+ * the first, READER, which is the alias the manifest enables.
  */
 enum class Disguise(val label: String, val alias: String) {
     READER("Reader", "FaceReader"),
@@ -52,21 +52,37 @@ object Disguises {
     }
 
     /**
-     * The active face. The choice is stored the first time it is read, so this always matches the
-     * enabled alias. An install whose face no longer exists (Calculator, Notes, Clock and Sudoku
-     * were removed in 1.5, and before 1.3 nothing was stored while on Calculator) moves to the
-     * default face. Its alias is enabled explicitly, because switching away from it earlier
-     * disabled it, and that setting outlives the update.
+     * The active face, with its alias made the enabled one. A fresh install starts on the first
+     * face (READER). An install that was disguised stays disguised: a stored face that no longer
+     * exists (Calculator, Notes, Clock and Sudoku were removed in 1.5), or a vault with nothing
+     * stored (before 1.3, Calculator was the default and nothing was stored), moves to the
+     * Dictionary. Every alias is set explicitly whenever one doesn't match, because the manifest's
+     * default changed in 1.6 (FaceReader is now enabled by default, which on its own would add a
+     * second icon to a direct install on the Dictionary) and because a face switched away from
+     * earlier stays disabled across updates.
      */
     fun current(context: Context): Disguise {
         val faces = available(context)
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val name = prefs.getString(KEY, null)
-        faces.firstOrNull { it.name == name }?.let { return it }
-        val face = faces.firstOrNull() ?: Disguise.DICTIONARY
+        faces.firstOrNull { it.name == name }?.let { face ->
+            if (!applied(context, face, faces)) set(context, face)
+            return face
+        }
+        val disguised = name != null || KeyVault.existsIn(context.filesDir)
+        val face = if (disguised && Disguise.DICTIONARY in faces) Disguise.DICTIONARY else faces.firstOrNull() ?: Disguise.READER
         set(context, face)
         if (name != null) forgetRemovedFaces(context)
         return face
+    }
+
+    /** True when [face] is explicitly enabled and every other face explicitly disabled. */
+    private fun applied(context: Context, face: Disguise, faces: List<Disguise>): Boolean {
+        val pm = context.packageManager
+        return faces.all { d ->
+            pm.getComponentEnabledSetting(component(context, d)) ==
+                if (d == face) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        }
     }
 
     /** Deletes what the faces removed in 1.5 left behind (Sudoku's saved game), so it can't hint they were used. */
@@ -86,8 +102,8 @@ object Disguises {
 }
 
 /**
- * Runs once after the app is updated, before it is next opened, so an install whose face was
- * removed gets the default face's icon straight away instead of no icon until first launch.
+ * Runs once after the app is updated, before it is next opened, so the launcher shows the chosen
+ * face straight away (see [Disguises.current]) rather than the manifest's default until launch.
  */
 class UpdateReceiver : android.content.BroadcastReceiver() {
     override fun onReceive(context: Context, intent: android.content.Intent) {

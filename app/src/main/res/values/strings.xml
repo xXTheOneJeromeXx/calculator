@@ -1,3 +1,4 @@
 <resources>
+    <string name="label_reader">Kanaiic Reader</string>
     <string name="label_dictionary">Dictionary</string>
 </resources>

@@ -64,7 +64,7 @@ find nothing), `DisguiseTest` (default faces first). `tools/scan_apk.sh` on both
 APKs (`app/build/outputs/apk/{direct,play}/release/`): the direct one must not contain
 "kanaiic".
 
-1. Direct, fresh install: opens as Dictionary. Hold Search: setup, with the Search hint.
+1. Direct, fresh install (up to 1.5): opens as Dictionary. Hold Search: setup, with the Search hint.
 2. Dictionary: "ran" opens run ("a form of run"); suggestions while typing; synonyms open
    their own entries; Thesaurus tab shows synonyms, Related and Opposite; Notes tab works;
    About shows the WordNet notice; recent lookups listed.
@@ -94,5 +94,16 @@ Automated: `DisguiseTest` (only READER and DICTIONARY remain).
    `adb shell cmd package query-activities --brief -a android.intent.action.MAIN -c
    android.intent.category.LAUNCHER` lists `.FaceDictionary`; `s.xml` is gone; `d.xml` says
    DICTIONARY. Hold Search with the old code: the reader opens with everything there.
-2. Direct: Settings has no Disguise section.
+2. Direct (1.5 only): Settings has no Disguise section.
 3. Dictionary Notes tab: write a note; holding Done just saves it.
+
+## 1.6 (same editions)
+
+Automated: `DisguiseTest`. `tools/scan_apk.sh` on both release APKs (no "kanaiic" ban now).
+
+1. Direct, fresh install: launcher shows only `.FaceReader` ("Kanaiic Reader"); it opens to
+   "Choose a code"; Settings > Disguise lists Kanaiic Reader and Dictionary; switching to
+   Dictionary leaves only `.FaceDictionary`, and Search opens the reader. Same on play.
+2. Update a disguised direct install: install the 1.5.0 build, set a code (it is on the
+   Dictionary), then install 1.6 over it. Within a second, before opening, the launcher lists
+   only `.FaceDictionary` (not also `.FaceReader`); the old code opens the reader via Search.
