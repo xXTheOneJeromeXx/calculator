@@ -1,8 +1,8 @@
 # Threat model and security design
 
-For reviewers and for anyone changing security-relevant code. Written for the independent
-review before 1.0.0. The user-facing summary is `USER_GUIDE.md`; the original requirements are in
-the handoff brief (sections 2, 4, 5, 6 and 9).
+For the independent reviewer and for anyone changing security-relevant code. Describes
+version 1.1.0. The user-facing summary is `USER_GUIDE.md`; the original requirements are in
+the original design brief (sections 2, 4, 5, 6 and 9).
 
 ## What is protected
 
@@ -73,13 +73,13 @@ c0         = version | salt | m | t | p | GCM_KEK_device( GCM_KEK_code( DEK ) )
 | --- | --- |
 | Backups / device transfer | Disabled (manifest + extraction rules). |
 | Network | No INTERNET permission; checked in CI. |
-| Screenshots, recording, recents | `FLAG_SECURE` and `setRecentsScreenshotEnabled(false)` whenever not on the calculator. Debug builds skip it for testing. |
+| Screenshots, recording, recents | `FLAG_SECURE` and `setRecentsScreenshotEnabled(false)` whenever not on a front screen. Debug builds skip it for testing. |
 | Keyboard | Note, search and passphrase fields: `IME_FLAG_NO_PERSONALIZED_LEARNING`, no suggestions, no autofill. Third-party keyboards may ignore this (stated in the guide). |
 | Clipboard | Copy/cut/share menus blocked on note fields; scripture text is not selectable. |
 | Logs | `Log` calls stripped by R8; release crash handler exits without logging. |
 | Intents | No intent filters except the launcher; no share targets, deep links or file types. |
 | Notifications, widgets, shortcuts | None. |
-| Process death | Cold start always opens the calculator; saved state is not restored. |
+| Process death | Cold start always opens the chosen front screen (locked); saved state is not restored. |
 | Residual files | Font file in cache only while open, deleted on lock and at start. No export staging file. |
 | Timing | Same derivation for right and wrong codes; guard file written on both. |
 
@@ -104,7 +104,13 @@ c0         = version | salt | m | t | p | GCM_KEK_device( GCM_KEK_code( DEK ) )
 8. **Updater tell.** An updater such as Obtainium shows where the app came from.
 9. **Single annotation document.** All notes are one encrypted item rewritten on every
    change; fine now, slow for very large note collections.
-10. **Forensic self-test not done.** Brief section 12 asks for a full-storage image after use
+10. **Disguises.** The app ships several launcher faces (calculator, notes) as
+    activity-aliases; the enabled one, the chosen-disguise preference, and the notepad's own
+    (non-secret) notes are all visible to the system and in a storage image. The set of
+    faces is also listed in the APK manifest. This reveals that the app can change its
+    appearance, though not what it hides. Switching faces briefly sends the app to the home
+    screen.
+11. **Forensic self-test not done.** Brief section 12 asks for a full-storage image after use
     to confirm nothing readable remains (including keyboard dictionaries).
 
 ## Suggested review scope

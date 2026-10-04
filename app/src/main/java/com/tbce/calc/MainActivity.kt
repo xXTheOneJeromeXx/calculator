@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.tbce.calc.ui.AppTheme
 import com.tbce.calc.ui.CalculatorScreen
+import com.tbce.calc.ui.NotesScreen
 import com.tbce.calc.ui.SetupScreen
 import com.tbce.calc.ui.ReaderScreen
 import com.tbce.calc.reader.Packs
@@ -38,11 +39,15 @@ class MainActivity : ComponentActivity() {
         java.io.File(cacheDir, "f0").delete()
         val ui = try { Packs { name -> assets.open("r/$name").use { it.readBytes() } }.meta().ui } catch (e: Exception) { emptyMap() }
         app = AppController(KeyVault(filesDir, KeystoreDeviceKey(this)), lifecycleScope, ui)
+        app.initDisguise(Disguises.current(this))
         setContent {
             AppTheme {
                 LaunchedEffect(app.screen) { setSecure(app.screen != Screen.CALC) }
                 when (app.screen) {
-                    Screen.CALC -> CalculatorScreen(app)
+                    Screen.CALC -> when (app.disguise) {
+                        Disguise.CALCULATOR -> CalculatorScreen(app)
+                        Disguise.NOTES -> NotesScreen(app)
+                    }
                     Screen.SETUP -> SetupScreen(app)
                     Screen.INSIDE -> ReaderScreen(app)
                 }

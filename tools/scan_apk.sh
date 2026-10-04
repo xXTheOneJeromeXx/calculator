@@ -18,7 +18,14 @@ if grep -q 'android.permission.INTERNET' "$TMP/manifest.txt"; then echo "FAIL: I
 perms=$("$BT/aapt2" dump permissions "$APK" | grep -c 'uses-permission' || true)
 [ "$perms" = 0 ] && echo "ok: no permissions" || { echo "FAIL: $perms permissions"; fail=1; }
 grep -q 'allowBackup.*=false' "$TMP/manifest.txt" && echo "ok: allowBackup=false" || { echo "FAIL: backups allowed"; fail=1; }
+# Only launcher entry points may be exported: one per disguise alias, and nothing else
+# (no exported providers, services, or receivers). So exported components == launcher filters.
 exported=$(grep -c 'exported(0x01010010)=true' "$TMP/manifest.txt" || true)
-[ "$exported" = 1 ] && echo "ok: only the launcher is exported" || { echo "FAIL: $exported exported components"; fail=1; }
+launchers=$(grep -c 'android.intent.category.LAUNCHER' "$TMP/manifest.txt" || true)
+if [ "$exported" = "$launchers" ] && [ "$exported" -ge 1 ]; then
+  echo "ok: only launcher faces are exported ($exported)"
+else
+  echo "FAIL: $exported exported components but $launchers launcher entries"; fail=1
+fi
 echo "size: $(stat -c %s "$APK") bytes"
 exit $fail

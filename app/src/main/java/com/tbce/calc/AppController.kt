@@ -1,5 +1,6 @@
 package com.tbce.calc
 
+import android.content.Context
 import android.os.SystemClock
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// CALC is the visible, locked front screen — whichever disguise is active (calculator, notes…).
 enum class Screen { CALC, SETUP, INSIDE }
 
 /** Calculator keys, as the UI sends them. */
@@ -60,6 +62,52 @@ class AppController(private val vault: KeyVault, private val scope: CoroutineSco
     /** Bumped when the vault opens, so the vault screen reloads its contents. */
     var vaultOpens by mutableIntStateOf(0)
         private set
+
+    /** Which disguise the launcher shows and which front screen appears when locked. */
+    var disguise by mutableStateOf(Disguise.CALCULATOR)
+        private set
+
+    fun initDisguise(d: Disguise) { disguise = d }
+
+    /** Switches the launcher icon and name, and the front screen, to [d]. */
+    fun setDisguise(context: Context, d: Disguise) {
+        Disguises.set(context, d)
+        disguise = d
+    }
+
+    /**
+     * The hidden arm/submit gesture for non-calculator faces (e.g. Notes): the first hold of the
+     * face's trigger arms silently, the second submits the digits typed in between. [digits] is
+     * what the face shows at the time of the hold. Mirrors the calculator's double-hold of '='.
+     */
+    var armed by mutableStateOf(false)
+        private set
+    private var faceTimer: Job? = null
+
+    fun faceTrigger(digits: ByteArray) {
+        if (!vault.exists()) { screen = Screen.SETUP; return }
+        if (!armed) {
+            armed = true
+            faceTimer?.cancel()
+            faceTimer = scope.launch { delay(Config.ARM_WINDOW_MS); armed = false }
+        } else {
+            armed = false
+            faceTimer?.cancel()
+            val code = digits.copyOf()
+            val gen = generation
+            scope.launch {
+                val s = withContext(Dispatchers.Default) { try { vault.unlock(code) } finally { code.fill(0) } }
+                if (s == null) return@launch
+                if (gen != generation) { s.wipe(); return@launch }
+                open(s)
+            }
+        }
+    }
+
+    fun faceDisarm() {
+        armed = false
+        faceTimer?.cancel()
+    }
 
     private fun now() = SystemClock.elapsedRealtime()
 
@@ -185,6 +233,7 @@ class AppController(private val vault: KeyVault, private val scope: CoroutineSco
         pickerOpen = false
         if (unlock.onBackground()) calc.clear()
         timeout?.cancel()
+        faceDisarm()
         lock()
         refresh()
     }

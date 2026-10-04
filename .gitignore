@@ -10,4 +10,3 @@ local.properties
 *.apk
 *.aab
 __pycache__/
-content/pack.key

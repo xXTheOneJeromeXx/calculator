@@ -41,7 +41,11 @@ If the code is wrong, the display just shows 0, as if nothing happened. If you p
 other key (+, −, ., or a short tap of `=`) or wait 15 seconds, the calculator goes back to
 normal and you can start again.
 
-It closes itself and shows the calculator again:
+If you have changed the disguise (see "Changing how it looks" below), the way to open it
+changes to match. For the Notes disguise: start a new note, hold **Done**, type your code,
+then hold **Done** again. A normal tap of Done just saves a note.
+
+It closes itself and shows the front screen again:
 
 - when you tap the calculator icon at the top left,
 - when you double-tap the top-left corner,
@@ -72,6 +76,15 @@ Screenshots, screen recording and the app-switcher preview are blocked while it 
   Notes: every note you have written, with a button to open it in the reader.
 
 Highlights and notes belong to the verse, so they show in every translation.
+
+## Changing how it looks
+
+Inside, under Settings > Disguise, you can choose how the app appears on your home screen:
+a calculator or a notepad. Only one shows at a time; the icon and name change straight away,
+and the app returns to the home screen. The reader, your code and everything inside stay the
+same. Each disguise has its own way to open the reader, and the screen reminds you when you
+switch. If several people might see your phone, a disguise that is common where you live
+draws less attention than one that is not.
 
 ## Backups
 

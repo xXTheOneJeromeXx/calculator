@@ -106,6 +106,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import com.tbce.calc.AppController
 import com.tbce.calc.Config
+import com.tbce.calc.Disguise
 import com.tbce.calc.R
 import com.tbce.calc.reader.Block
 import com.tbce.calc.reader.Break
@@ -299,7 +300,7 @@ private fun TopBar(app: AppController, state: ReaderState, c: ReaderColors, onPi
     ) {
         // Not keyboard-focusable, so a stray Enter or Space can't trigger it.
         IconButton(onClick = { app.lock() }, modifier = Modifier.focusProperties { canFocus = false }) {
-            Icon(painterResource(R.drawable.ic_calc), contentDescription = "Back to calculator", tint = c.dim)
+            Icon(painterResource(R.drawable.ic_hide), contentDescription = "Hide", tint = c.dim)
         }
         if (state.tab == Tab.READ) {
             val (book, ch) = state.location()
@@ -656,8 +657,10 @@ fun PrivateField(
 
 @Composable
 private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors, onImport: () -> Unit) {
+    val context = LocalContext.current
     var about by remember { mutableStateOf(false) }
     var guide by remember { mutableStateOf(false) }
+    var pendingDisguise by remember { mutableStateOf<Disguise?>(null) }
     var confirmErase by remember { mutableStateOf(false) }
     if (about) {
         AboutPane(state, c) { about = false }
@@ -711,6 +714,23 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
         }
         Spacer(Modifier.height(16.dp))
         HorizontalDivider(color = c.dim.copy(alpha = 0.2f))
+        Label("Disguise", c)
+        Text(
+            "How the app looks on your home screen. Only one shows at a time; the icon and name change right away.",
+            color = c.dim, fontSize = 13.sp, lineHeight = 18.sp, modifier = Modifier.padding(bottom = 4.dp),
+        )
+        for (d in Disguise.entries) {
+            val on = app.disguise == d
+            Text(
+                (if (on) "✓  " else "     ") + d.label,
+                color = if (on) c.accent else c.text,
+                fontSize = 16.sp,
+                fontWeight = if (on) FontWeight.Medium else FontWeight.Normal,
+                modifier = Modifier.fillMaxWidth().clickable { if (!on) pendingDisguise = d }.padding(vertical = 10.dp),
+            )
+        }
+        Spacer(Modifier.height(16.dp))
+        HorizontalDivider(color = c.dim.copy(alpha = 0.2f))
         Text(state.meta.ui("guide"), color = c.text, fontSize = 16.sp,
             modifier = Modifier.fillMaxWidth().clickable { guide = true }.padding(vertical = 14.dp))
         Text(state.meta.ui("about"), color = c.text, fontSize = 16.sp,
@@ -726,11 +746,20 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
             color = c.dim, fontSize = 13.sp, lineHeight = 18.sp, modifier = Modifier.padding(vertical = 12.dp),
         )
     }
+    pendingDisguise?.let { d ->
+        AlertDialog(
+            onDismissRequest = { pendingDisguise = null },
+            title = { Text("Look like ${d.label}?") },
+            text = { Text(state.meta.ui(if (d == Disguise.NOTES) "entry_notes" else "entry_calc") + "\n\nThe icon and name change now, and the app returns to the home screen.") },
+            confirmButton = { TextButton(onClick = { pendingDisguise = null; app.setDisguise(context, d) }) { Text("Switch") } },
+            dismissButton = { TextButton(onClick = { pendingDisguise = null }) { Text("Cancel") } },
+        )
+    }
     if (confirmErase) {
         AlertDialog(
             onDismissRequest = { confirmErase = false },
             title = { Text("Erase everything?") },
-            text = { Text("This deletes the code and all settings. It can't be undone. The next hold of = starts setup again.") },
+            text = { Text("This deletes the code and all settings. It can't be undone. You'll set a new code the next time you open the reader.") },
             confirmButton = { TextButton(onClick = { confirmErase = false; app.beforeLock = null; app.eraseEverything() }) { Text("Erase") } },
             dismissButton = { TextButton(onClick = { confirmErase = false }) { Text("Cancel") } },
         )
@@ -741,6 +770,7 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
 private fun Label(text: String, c: ReaderColors) {
     Text(text.uppercase(), color = c.dim, fontSize = 12.sp, letterSpacing = 1.5.sp, modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
 }
+
 
 @Composable
 private fun AboutPane(state: ReaderState, c: ReaderColors, close: () -> Unit) {

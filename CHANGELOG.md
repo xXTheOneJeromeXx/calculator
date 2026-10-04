@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0 (2026-10-04): switchable disguises
+
+- Settings > Disguise: choose how the app looks on the home screen — a calculator or a
+  notepad. The icon and name change at once (via launcher activity-aliases); only one shows
+  at a time. The reader, code and contents are unchanged.
+- Notes disguise: a plain, working notepad. To open the reader, start a note, hold Done,
+  type your code, then hold Done again; a normal tap of Done saves the note. Its own notes
+  are ordinary and stored in the clear, so the disguise looks lived-in.
+- The reader's exit button is now a neutral "hide", not a calculator icon.
+- Disguise reminders ship in the encrypted pack; the APK scan still finds no telltale words,
+  no permissions, backups off, and only launcher faces exported.
+
 ## 1.0.0 (2026-10-04): first public release
 
 - Same app as 0.5.0, after an independent review. Plain-language install steps for people

@@ -74,6 +74,9 @@ UI = {
     "code_watch": "Anyone watching can see the digits on the calculator display as you type.",
     "code_mismatch": "Those didn't match. Start again.",
     "code_weak": "Easy to guess", "code_short": "Too short", "code_ok": "OK. Longer is better.", "code_good": "Good length",
+    # Disguise reminders: name the hidden gesture, so they live in the pack, not the APK.
+    "entry_calc": "The app now looks like a calculator. To open the reader: hold =, type your code, then hold = again.",
+    "entry_notes": "The app now looks like Notes. To open the reader: tap + to start a note, hold Done, type your code, then hold Done again. A normal tap of Done just saves a note.",
 }
 
 PARA = {
