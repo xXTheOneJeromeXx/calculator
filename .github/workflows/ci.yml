@@ -1,0 +1,28 @@
+name: ci
+
+# Hardening checks from the brief (sections 9 and 12): unit tests, a release build, and the
+# APK scan (no telltale words, no permissions, backups off, only the launcher exported).
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Android platform
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.2" "build-tools;36.1.0" > /dev/null || true
+      - name: Unit tests
+        run: ./gradlew --no-daemon testDebugUnitTest
+      - name: Release build (unsigned)
+        run: ./gradlew --no-daemon assembleRelease
+      - name: APK scan
+        run: |
+          apk=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          tools/scan_apk.sh "$apk"

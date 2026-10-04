@@ -1,0 +1,33 @@
+[
+  {
+    "name": "Berean Standard Bible",
+    "abbr": "BSB",
+    "license": "Public Domain",
+    "source": "https://ebible.org/Scriptures/engbsb_usfm.zip",
+    "sha256": "b77cc2d5161b03610204e2564934135b955ea87e534fd5ec7db336048699483b",
+    "notice": "licenses/BSB.txt"
+  },
+  {
+    "name": "World English Bible",
+    "abbr": "WEB",
+    "license": "Public Domain",
+    "source": "https://ebible.org/Scriptures/eng-web_usfm.zip",
+    "sha256": "b09f8b9f197d05d54c32eabaa90fed9b11279b03ecc26cb347da6e1dc943eb7d",
+    "notice": "licenses/WEB.txt"
+  },
+  {
+    "name": "King James Version",
+    "abbr": "KJV",
+    "license": "Public Domain",
+    "source": "https://ebible.org/Scriptures/eng-kjv_usfm.zip",
+    "sha256": "0e0359e9e488582a72c86800f227839ecb16dada7bb5ba316509d374c59e559a",
+    "notice": "licenses/KJV.txt"
+  },
+  {
+    "name": "Literata",
+    "license": "SIL Open Font License 1.1",
+    "source": "https://github.com/google/fonts/tree/main/ofl/literata",
+    "sha256": "b41138c9373112f32abb589cc22e8674b06ed4048b0c513be922bdd26f274440",
+    "notice": "licenses/Literata-OFL.txt"
+  }
+]

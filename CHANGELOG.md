@@ -1,0 +1,112 @@
+# Changelog
+
+## 1.0.0 (2026-10-04): first public release
+
+- Same app as 0.5.0, after an independent review. Plain-language install steps for people
+  who have only used the Play Store (`docs/INSTALL.md`). Source published under GPLv3.
+
+## 0.5.0 (2026-10-03): user guide (Phase 6)
+
+- `docs/USER_GUIDE.md`: setup, opening and closing, reading, notes, backups, erasing, and
+  plainly what the app does and does not protect against. Also inside the app (encrypted)
+  under Settings > How this app works.
+- `docs/THREAT_MODEL.md`: design, leak checklist status, and ten known weaknesses for the
+  independent review.
+
+## 0.4.0 (beta 0.4, 2026-10-03): backup, wipe, hardening
+
+- Settings > Backup: export notes, highlights and saved items to a file locked with a
+  passphrase (Argon2id + AES-256-GCM, no header or magic bytes, chosen through the system
+  file picker), and import one. Import adds what is missing and never replaces anything.
+- Settings > Security: change code (re-wraps the key only), and an opt-in "Erase after 10
+  wrong codes" with a warning. Only hold-= attempts count; a right code resets the count.
+  The count and setting are sealed with the device key, and the file is rewritten on right
+  and wrong codes alike so a failure makes no extra disk activity.
+- The app stays open behind the system file picker for up to 2 minutes, then locks.
+- Setup and code-screen wording moved into the encrypted pack.
+- Release builds exit quietly on a crash instead of logging a stack trace.
+- Leftover font file from a killed process is deleted at start.
+- GitHub Actions: unit tests, release build and the APK scan on every push.
+
+Known limits: other UI words (Saved, Notes, Highlight…) are still readable in the APK;
+the bundled text is obfuscation only; Argon2 is not yet calibrated on a slow phone.
+
+## 0.3.2 (2026-10-03)
+
+- Saved tab has two sections, Verses and Notes. Notes lists every verse note and chapter
+  note on its own (nothing to save), with the verse text, Edit, and Open in reader.
+
+## 0.3.1 (2026-10-03)
+
+- Selecting verses: each tap adds or removes one verse, so you can pick John 3:16 and 18
+  without 17. Long-press a verse to add every verse from the last one tapped through it.
+- Highlights, notes and Saved items work on any set of verses ("John 3:16, 18"); Saved
+  text shows "…" where verses are skipped. Notes and Saved items from 0.3.0 carry over.
+
+## 0.3.0 (beta 0.3, 2026-10-03): highlights, notes, Saved
+
+- Tap a verse to select it; tap another to extend to a range. A bar appears with five
+  highlight colors (and remove), Note, Save and Done.
+- Highlights are stored per verse, so they show in every translation.
+- Verse and range notes: a small dot after the verse; tap it to read, edit or delete.
+- Chapter notes at the end of each chapter, oldest first, each with an optional verse tag.
+- Saved tab: save a verse, range or whole chapter. Filter, sort (newest, oldest, book
+  order), label, any number of notes per item, open in the reader, and view in the
+  translation it was saved from.
+- Recent passages at the top of the book picker.
+- All of it is one encrypted item in the vault, written on every change and dropped from
+  memory on lock. Note fields ask the keyboard not to learn and block copy.
+
+Still to come (0.4): encrypted export/import, wipe options, release hardening.
+
+## 0.2.0 (beta 0.2, 2026-10-03): reader
+
+- The placeholder is replaced by the reader: BSB (default), WEB and KJV, all 66 books,
+  offline. Section headings, Psalm titles and poetry indentation; small verse numbers.
+- Book and chapter picker, swipe or Previous/Next between chapters, translation switch
+  (keeps your place), last position remembered.
+- Search: type a reference ("John 3:16", "1 cor 13:4-7", "ps 23") to jump, or words to
+  search the current translation. The index is built in memory after unlock and dropped
+  on lock.
+- Settings: Paper, Sepia, Dark and Black themes, text size, line spacing, "About these
+  texts" (sources and licenses), Erase everything. Literata typeface.
+- Text, book names, reader words, the font and license texts ship as encrypted packs
+  under opaque names (build-time key: obfuscation only). The font is
+  decrypted to the app cache while open and deleted on lock.
+- `tools/scan_apk.sh` checks the release APK: no telltale words, no permissions, backups
+  off, only the launcher exported. Passes. Release APK: 5.9 MB (packs are 4.7 MB of it).
+- Panic: the calculator button at top left locks with one tap; double-tap anywhere in the
+  top-left corner still works and no longer blocks the controls under it.
+
+Still to come: recent passages (Q28) with Saved in 0.3; setup-screen wording still readable
+in the APK; failed-attempt counter; Argon2 calibration on a slow phone.
+
+## 0.1.1 (2026-10-03)
+
+- Corner double-tap lock now works on a real phone: the target was mostly hidden under
+  the status bar. It now reaches about 1 cm below the status bar, and two taps up to
+  half a second apart count.
+
+## 0.1.0 (beta 0.1, 2026-10-03): calculator and locked space core
+
+- Working calculator: normal precedence, BigDecimal arithmetic (0.1 + 0.2 = 0.3),
+  percent, plus/minus, chained operations, repeated `=`, live preview, divide-by-zero
+  message. Turn the phone sideways for scientific keys (trig in degrees or radians,
+  logs, powers, roots, factorial, π, e, parentheses).
+- First run: hold `=` for 1.5 s to choose a code (6+ digits, entered twice).
+- Open: hold `=` until the display shows 0, type the code, hold `=` again. A wrong
+  code just shows 0. Any operator, `.` or short `=` silently cancels; so does waiting
+  15 s or leaving the app.
+- Key hierarchy from the brief: Argon2id (64 MiB, t=3, p=1) of the code, wrapped
+  again by an Android Keystore key (StrongBox when available). The code is never stored.
+- Placeholder inside: an encrypted scratch pad, "Back to calculator", double-tap the
+  top-left corner, 60 s idle lock, and lock on background or screen off. Keys are
+  zeroed on lock. Screenshots and the recents thumbnail are blocked while open.
+- "Erase everything" deletes the wrapped key, the Keystore key, and the data.
+- No permissions, backups disabled, nothing exported but the launcher, release logging
+  stripped, R8 enabled. APK about 0.9 MB.
+
+Known gaps (planned for later betas): UI text for the setup and placeholder screens is
+still readable inside the APK (moves into the encrypted pack in Phase 2/5); no
+failed-attempt counter or wipe-after-N yet (Phase 5); Argon2 not yet calibrated on a
+slow phone (about 1.5 s on the emulator).
