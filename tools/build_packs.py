@@ -70,11 +70,14 @@ UI = {
     "search_hint": "Search, a reference like John 3:16, or a Strong's number like G26",
     "go_to": "Go to", "no_results": "No matches", "results": "matches", "loading": "Loading…",
     # Strong's numbers (1.4).
-    "orig": "Original", "orig_none": "No original-language words are listed here.",
+    "orig": "Strong's", "orig_none": "No original-language words are listed here.",
     "orig_note": "The Hebrew or Greek behind each word, with its Strong's number, as tagged in the King James Version. Tap a word for its meaning and every verse that uses it.",
     "lex_strongs": "Strong's", "lex_hebrew": "Hebrew", "lex_greek": "Greek",
     "lex_meaning": "Strong's definition", "lex_kjv": "KJV renderings (Strong's)",
     "lex_renders": "Translated in the KJV as", "lex_verses": "Used in {n} verses",
+    "lex_hint": "Search: a number like H430 or G26, an English word, or a transliteration",
+    "lex_intro": "Strong's numbers the Hebrew and Greek words of the Bible. Search here by number, by an English word as the King James Version translates it (love, light), or by the original word's transliteration (agape, elohiym). Tap an entry for its meaning and every verse that uses it.\n\nTo see the words of a particular verse, select the verse while reading and tap Strong's.",
+    "lex_none": "No entries match.",
     # Setup and code screens: kept out of the APK so they don't describe the hidden gesture.
     "code_new": "Choose a code", "code_again": "Enter the code again", "code_change": "Choose a new code",
     "code_min": "Use at least {min} digits. {good} or more is better.",
@@ -86,6 +89,17 @@ UI = {
     "code_weak": "Easy to guess", "code_short": "Too short", "code_ok": "OK. Longer is better.", "code_good": "Good length",
     # Disguise reminders: name the hidden gesture, so they live in the pack, not the APK.
     "entry_dictionary": "The app now looks like a Dictionary, with Thesaurus and Notes tabs. To open the reader: hold Search until the box clears, type your code in the box, then hold Search again. A normal tap of Search just looks a word up.",
+    # Always-visible ways in, shown under Settings > Disguise.
+    "how_title": "How to open the app",
+    "how_dictionary": "As Dictionary: hold Search until the box clears, type your code in the box, then hold Search again.",
+    "how_reader": "As Kanaiic Reader: type your code on the number pad and tap Open.",
+    # Offered once, right after a code is first set on the app's own face.
+    "offer_title": "Disguise the app now?",
+    "offer_text": "It can look like an ordinary dictionary on your home screen and in your app list. You can also do this later in Settings > Disguise.",
+    "offer_now": "Disguise now", "offer_later": "Later",
+    "offer_steps_title": "How to open it once disguised",
+    "offer_steps": "The app will show as \"Dictionary\". To open the reader: hold Search until the box clears, type your code in the box, then hold Search again. A normal tap of Search just looks a word up.\n\nThese steps are always in Settings > Disguise. The app goes to the home screen when you switch.",
+    "offer_switch": "Switch to Dictionary",
     "entry_reader": "The app now shows its own name and icon, and opens with your code on a plain number pad. Anyone who sees the phone can tell what it is.",
     # The play edition's undisguised front screen.
     "reader_welcome": "Bible texts and your notes stay on this phone, locked with a code you choose.",

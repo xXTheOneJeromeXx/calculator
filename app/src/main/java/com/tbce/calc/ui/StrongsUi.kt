@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tbce.calc.reader.Overlay
@@ -222,4 +224,54 @@ fun StrongsSearchRow(state: ReaderState, query: String, c: ReaderColors) {
         Text(listOf(e.transliteration, renders.joinToString(", ")).filter { it.isNotEmpty() }.joinToString(" — "), color = c.dim, fontSize = 14.sp)
     }
     HorizontalDivider(color = c.dim.copy(alpha = 0.2f))
+}
+
+/**
+ * The Strong's tab: search the Hebrew and Greek lexicon by number, by an English word as the KJV
+ * renders it, or by transliteration. Tapping an entry opens it (meaning and every verse). The
+ * query is kept on [ReaderState] so it survives switching tabs, and dropped on lock.
+ */
+@Composable
+fun StrongsPane(state: ReaderState, c: ReaderColors, touch: () -> Unit) {
+    var results by remember { mutableStateOf<List<Strongs.Match>?>(null) }
+    LaunchedEffect(state.lexQuery) {
+        val q = state.lexQuery.trim()
+        if (q.isEmpty()) { results = null; return@LaunchedEffect }
+        kotlinx.coroutines.delay(250)
+        results = withContext(Dispatchers.Default) { state.strongs().find(q) }
+    }
+    Column(Modifier.fillMaxSize().imePadding()) {
+        PrivateField(
+            hint = state.meta.ui("lex_hint"),
+            c = c,
+            onChange = { state.lexQuery = it; touch() },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+            initial = state.lexQuery,
+            autoFocus = false,
+        )
+        val list = results
+        LazyColumn(Modifier.fillMaxSize()) {
+            when {
+                list == null -> item {
+                    Text(state.meta.ui("lex_intro"), color = c.dim, fontSize = 15.sp, lineHeight = 22.sp, modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp))
+                }
+                list.isEmpty() -> item {
+                    Text(state.meta.ui("lex_none"), color = c.dim, fontSize = 15.sp, modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp))
+                }
+                else -> items(list, key = { it.number }) { m ->
+                    Column(Modifier.fillMaxWidth().clickable { state.overlay = Overlay.Lexicon(m.number) }.padding(horizontal = 20.dp, vertical = 12.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(m.lemma, color = c.text, fontSize = 20.sp)
+                            Spacer(Modifier.width(10.dp))
+                            Text(listOf(m.transliteration, m.number).filter { it.isNotEmpty() }.joinToString(" · "), color = c.dim, fontSize = 13.sp)
+                        }
+                        if (m.renderings.isNotEmpty()) {
+                            Text(m.renderings.joinToString(", "), color = c.dim, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        }
+                    }
+                    HorizontalDivider(color = c.dim.copy(alpha = 0.12f), modifier = Modifier.padding(horizontal = 20.dp))
+                }
+            }
+        }
+    }
 }

@@ -13,7 +13,7 @@ import org.json.JSONObject
 import java.io.File
 
 enum class ReaderTheme { PAPER, SEPIA, DARK, BLACK }
-enum class Tab { READ, SAVED, SEARCH, SETTINGS }
+enum class Tab { READ, SAVED, SEARCH, STRONGS, SETTINGS }
 
 /** Verses picked in the reader, in order; they need not be next to each other. [last] is the latest tap. */
 data class Selection(val book: String, val chapter: Int, val verses: List<Int>, val last: Int)
@@ -94,6 +94,9 @@ class ReaderState(context: Context, private val session: VaultSession, systemDar
     }
 
     private var strongsData: Strongs? = null
+
+    /** What is typed in the Strong's tab, kept while switching tabs. */
+    var lexQuery by mutableStateOf("")
 
     /** Strong's numbers, loaded on first use; dropped with the rest on lock. */
     fun strongs(): Strongs = synchronized(this) {

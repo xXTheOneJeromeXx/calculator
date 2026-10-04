@@ -103,9 +103,14 @@ class AppController(private val vault: KeyVault, private val scope: CoroutineSco
         val gen = generation
         val s = withContext(Dispatchers.Default) { vault.create(code) }
         if (gen != generation) { s.wipe(); return false }
+        // A first code set on the app's own face: the reader offers to disguise the app now.
+        offerDisguise = disguise == Disguise.READER
         open(s)
         return true
     }
+
+    /** True right after the first code is set on the app's own face, until answered. Memory only. */
+    var offerDisguise by mutableStateOf(false)
 
     fun cancelSetup() {
         screen = Screen.FRONT

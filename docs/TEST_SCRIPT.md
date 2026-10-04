@@ -107,3 +107,29 @@ Automated: `DisguiseTest`. `tools/scan_apk.sh` on both release APKs (no "kanaiic
 2. Update a disguised direct install: install the 1.5.0 build, set a code (it is on the
    Dictionary), then install 1.6 over it. Within a second, before opening, the launcher lists
    only `.FaceDictionary` (not also `.FaceReader`); the old code opens the reader via Search.
+
+## 1.7 (PDF tab, disguise offer, Strong's tab)
+
+Make test files with Ghostscript (a 60-page PDF, a copy with `-sUserPassword=…`, and a text
+file renamed `.pdf`) and `adb push` them to `/sdcard/Download/`.
+
+1. Dictionary face: tab bar shows Dictionary, Thesaurus, Notes, PDF. PDF tab: "Open a PDF".
+2. Open the 60-page PDF: name in the title, page counter, pages sharp. Fling to the end and
+   back several times: `dumpsys meminfo` native heap stays bounded (about 50–95 MB).
+3. Pinch out: zooms up to 4x and re-renders sharper; one finger pans sideways and scrolls.
+   (On the emulator: `adb root`, then `sendevent` on `/dev/input/event2` with ABS_MT_PRESSURE
+   set, or touches are ignored. Release every slot afterwards, or reboot if input sticks.)
+4. Switch to Dictionary and back: the PDF is still open at the same page.
+5. Password-protected file: "This PDF is password-protected, which isn't supported." Text
+   file: "That file couldn't be opened as a PDF." With a PDF open, the same messages show in
+   a dialog and the open PDF stays.
+6. Hold Search with the code while a PDF is open: the reader opens. Nothing in
+   `shared_prefs` or `files` names the PDF.
+7. Fresh install, set a code: "Disguise the app now?" Later: stays Kanaiic Reader; Settings
+   starts with "How to open the app" for the current face, and each Disguise option shows its
+   way in. Disguise now: the steps dialog, then Switch to Dictionary: launcher shows only
+   `.FaceDictionary`; hold Search with the code opens the reader; no second offer.
+8. Bottom bar: Read, Saved, Search, Strong's, Settings. Strong's tab: intro text; "love" lists
+   G26, H157, G25 near the top; "agape" and "G26" find G26; tap opens the entry; Back returns
+   to the results with the query kept. Verse selection bar button reads "Strong's".
+

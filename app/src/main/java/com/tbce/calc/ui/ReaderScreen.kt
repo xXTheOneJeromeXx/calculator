@@ -221,7 +221,7 @@ fun ReaderScreen(app: AppController) {
     )
     // The keyboard belongs to the search field only.
     LaunchedEffect(state.tab, showPicker, state.overlay) {
-        if ((state.tab != Tab.SEARCH && state.overlay == null) || showPicker) {
+        if ((state.tab != Tab.SEARCH && state.tab != Tab.STRONGS && state.overlay == null) || showPicker) {
             (view.context.getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager)
                 .hideSoftInputFromWindow(view.windowToken, 0)
         }
@@ -262,6 +262,7 @@ fun ReaderScreen(app: AppController) {
                     Tab.READ -> ReadPane(state, c)
                     Tab.SAVED -> SavedPane(state, c, touch)
                     Tab.SEARCH -> SearchPane(state, c, touch)
+                    Tab.STRONGS -> StrongsPane(state, c, touch)
                     Tab.SETTINGS -> SettingsPane(app, state, c, startImport)
                 }
             }
@@ -291,6 +292,7 @@ fun ReaderScreen(app: AppController) {
                 confirmButton = { TextButton(onClick = { state.notice = null }) { Text("OK") } },
             )
         }
+        if (app.offerDisguise) DisguiseOffer(app, state)
 
     }
 }
@@ -317,7 +319,7 @@ private fun TopBar(app: AppController, state: ReaderState, c: ReaderColors, onPi
             )
         } else {
             Text(
-                when (state.tab) { Tab.SAVED -> "Saved"; Tab.SEARCH -> "Search"; else -> "Settings" },
+                when (state.tab) { Tab.SAVED -> "Saved"; Tab.SEARCH -> "Search"; Tab.STRONGS -> state.meta.ui("lex_strongs"); else -> "Settings" },
                 color = c.text, fontSize = 18.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 8.dp),
             )
         }
@@ -351,7 +353,7 @@ private fun TopBar(app: AppController, state: ReaderState, c: ReaderColors, onPi
 private fun BottomBar(state: ReaderState, c: ReaderColors) {
     HorizontalDivider(color = c.dim.copy(alpha = 0.2f))
     Row(Modifier.fillMaxWidth().height(56.dp)) {
-        for ((tab, label) in listOf(Tab.READ to "Read", Tab.SAVED to "Saved", Tab.SEARCH to "Search", Tab.SETTINGS to "Settings")) {
+        for ((tab, label) in listOf(Tab.READ to "Read", Tab.SAVED to "Saved", Tab.SEARCH to "Search", Tab.STRONGS to state.meta.ui("lex_strongs"), Tab.SETTINGS to "Settings")) {
             val selected = state.tab == tab
             Box(
                 Modifier.weight(1f).fillMaxSize().clickable { state.tab = tab },
@@ -677,6 +679,11 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
     }
     val family = state.typeface?.let { FontFamily(it) } ?: FontFamily.Serif
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 8.dp)) {
+        // Always shown first, so the way in is never more than a tap away.
+        Column(Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp).clip(RoundedCornerShape(12.dp)).background(c.surface).padding(14.dp)) {
+            Text(state.meta.ui("how_title"), color = c.text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+            Text(state.meta.ui(howToOpen(app.disguise)), color = c.text, fontSize = 15.sp, lineHeight = 21.sp, modifier = Modifier.padding(top = 6.dp))
+        }
         Label("Theme", c)
         Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             for ((t, name) in listOf(ReaderTheme.PAPER to "Paper", ReaderTheme.SEPIA to "Sepia", ReaderTheme.DARK to "Dark", ReaderTheme.BLACK to "Black")) {
@@ -729,13 +736,15 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
             )
             for ((d, name) in faces) {
                 val on = app.disguise == d
-                Text(
-                    (if (on) "✓  " else "     ") + name,
-                    color = if (on) c.accent else c.text,
-                    fontSize = 16.sp,
-                    fontWeight = if (on) FontWeight.Medium else FontWeight.Normal,
-                    modifier = Modifier.fillMaxWidth().clickable { if (!on) pendingDisguise = d }.padding(vertical = 10.dp),
-                )
+                Column(Modifier.fillMaxWidth().clickable { if (!on) pendingDisguise = d }.padding(vertical = 10.dp)) {
+                    Text(
+                        (if (on) "✓  " else "     ") + name,
+                        color = if (on) c.accent else c.text,
+                        fontSize = 16.sp,
+                        fontWeight = if (on) FontWeight.Medium else FontWeight.Normal,
+                    )
+                    Text(state.meta.ui(howToOpen(d)), color = c.dim, fontSize = 13.sp, lineHeight = 18.sp, modifier = Modifier.padding(start = 26.dp, top = 2.dp))
+                }
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -828,5 +837,42 @@ private fun GuidePane(state: ReaderState, c: ReaderColors, close: () -> Unit) {
             }
             item { Spacer(Modifier.height(32.dp)) }
         }
+    }
+}
+
+/** Pack key for how to open the app from face [d]. */
+private fun howToOpen(d: Disguise) = when (d) {
+    Disguise.READER -> "how_reader"
+    Disguise.DICTIONARY -> "how_dictionary"
+}
+
+/**
+ * Right after the first code is set on the app's own face: disguise now, or later in Settings.
+ * Disguising now first shows how to open the app as the Dictionary, then switches (which sends
+ * the app to the home screen).
+ */
+@Composable
+private fun DisguiseOffer(app: AppController, state: ReaderState) {
+    val context = LocalContext.current
+    var steps by remember { mutableStateOf(false) }
+    val later = { app.offerDisguise = false }
+    if (!steps) {
+        AlertDialog(
+            onDismissRequest = later,
+            title = { Text(state.meta.ui("offer_title")) },
+            text = { Text(state.meta.ui("offer_text")) },
+            confirmButton = { TextButton(onClick = { steps = true }) { Text(state.meta.ui("offer_now")) } },
+            dismissButton = { TextButton(onClick = later) { Text(state.meta.ui("offer_later")) } },
+        )
+    } else {
+        AlertDialog(
+            onDismissRequest = later,
+            title = { Text(state.meta.ui("offer_steps_title")) },
+            text = { Text(state.meta.ui("offer_steps")) },
+            confirmButton = {
+                TextButton(onClick = { app.offerDisguise = false; app.setDisguise(context, Disguise.DICTIONARY) }) { Text(state.meta.ui("offer_switch")) }
+            },
+            dismissButton = { TextButton(onClick = later) { Text(state.meta.ui("offer_later")) } },
+        )
     }
 }

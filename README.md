@@ -2,13 +2,15 @@
 
 A private, offline Bible reader for Android that can look like a dictionary. It opens with
 your code into the Berean Standard Bible, World English Bible and King James Version, with
+Strong's numbers (search the Hebrew and Greek lexicon, or see the words behind any verse),
 highlights, notes, a Saved list and passphrase-locked backups. It has no internet permission
 and stores everything encrypted, tied to your code and to the phone.
 
 It comes in two versions built from this code, which work the same way: each opens as
-**Kanaiic Reader** with a plain code screen, and in Settings can be made to look like a
-working offline dictionary and thesaurus (to open the reader from it: hold **Search**, type
-the code, hold **Search** again). They differ only in where they come from:
+**Kanaiic Reader** with a plain code screen, offers right after setup to disguise itself, and
+in Settings can be made to look like a working offline dictionary and thesaurus with notes
+and PDF tabs (to open the reader from it: hold **Search**, type the code, hold **Search**
+again). They differ only in where they come from:
 
 - **Google Play** (`com.kanaiic.reader`). Its store page describes the disguise, so the
   disguise only hides the app from a glance.

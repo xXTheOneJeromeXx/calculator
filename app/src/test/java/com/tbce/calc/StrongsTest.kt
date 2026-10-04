@@ -59,4 +59,23 @@ class StrongsTest {
         assertNull(Strongs.normalize("John 3:16"))
         assertNull(Strongs.normalize("H"))
     }
+
+    @Test fun findsByNumberEnglishAndTransliteration() {
+        assertEquals(listOf("G26"), strongs.find("g0026").map { it.number })
+        // English: what the KJV translates as "love", most used first.
+        val love = strongs.find("love").map { it.number }
+        assertTrue(love.take(3).containsAll(listOf("G25", "G26")) || love.indexOf("G26") < 5)
+        assertTrue("H157" in love.take(5))
+        // Transliteration, with or without accents.
+        assertEquals("G26", strongs.find("agape").first().number)
+        assertEquals("H430", strongs.find("elohiym").first().number)
+        assertTrue(strongs.find("a").isEmpty())
+        assertTrue(strongs.find("zzzqqq").isEmpty())
+        assertTrue(strongs.find("love", limit = 5).size == 5)
+    }
+
+    @Test fun plainFoldsAccents() {
+        assertEquals("agape", Strongs.plain("agápē"))
+        assertEquals("elohiym", Strongs.plain("ʼĕlôhîym"))
+    }
 }

@@ -79,12 +79,62 @@ class Strongs(private val packs: Packs, private val books: List<String>) {
         return (0 until minOf(limit, r.length())).map { r.getJSONArray(it).getString(0) }
     }
 
+    /** A search result: enough for one row (number, original word, transliteration, usual renderings). */
+    class Match(val number: String, val lemma: String, val transliteration: String, val renderings: List<String>)
+
+    private class Indexed(val number: String, val lemma: String, val translit: String, val plainTranslit: String, val text: String)
+
+    // Every entry with lowercase, accent-free fields to match against. Built on first search.
+    private val index: List<Indexed> by lazy {
+        lex.keys().asSequence().map { n ->
+            val a = lex.getJSONArray(n)
+            Indexed(n, a.getString(0), a.getString(1), plain(a.getString(1)), plain(listOf(a.getString(3), a.getString(4), a.getString(5)).joinToString(" ")))
+        }.sortedWith(compareBy({ it.number[0] }, { it.number.substring(1).toInt() })).toList()
+    }
+
+    /**
+     * Entries for [query]: a Strong's number ("H430", "g26") gives that entry; otherwise words the
+     * KJV translates as [query] come first (most used first), then transliterations ("agape"),
+     * then entries whose Strong's text mentions it. At most [limit].
+     */
+    fun find(query: String, limit: Int = 100): List<Match> {
+        normalize(query)?.let { n -> return listOfNotNull(entry(n)?.let { Match(n, it.lemma, it.transliteration, renderings(n)) }) }
+        val q = plain(query).trim()
+        if (q.length < 2) return emptyList()
+        val word = Regex("\\b" + Regex.escape(q) + "\\b")
+        val ranked = ArrayList<Pair<Int, Indexed>>()
+        for (e in index) {
+            val renders = conc.optJSONObject(e.number)?.optJSONArray("r")
+            var rank = Int.MAX_VALUE
+            if (renders != null) {
+                for (i in 0 until renders.length()) {
+                    val r = renders.getJSONArray(i)
+                    if (plain(r.getString(0)) == q) { rank = -r.getInt(1); break }
+                }
+            }
+            if (rank == Int.MAX_VALUE) rank = when {
+                e.plainTranslit == q -> 1_000_000
+                e.plainTranslit.startsWith(q) -> 1_000_001
+                e.lemma == query.trim() -> 1_000_000
+                word.containsMatchIn(e.text) -> 2_000_000
+                else -> continue
+            }
+            ranked += rank to e
+        }
+        return ranked.sortedBy { it.first }.take(limit).map { (_, e) -> Match(e.number, e.lemma, e.translit, renderings(e.number)) }
+    }
+
     companion object {
         private val NUMBER = Regex("^([HhGg])\\s*0*(\\d{1,4})$")
 
         /** "h0430", "H 430" -> "H430"; null if [text] is not a Strong's number. */
         fun normalize(text: String): String? =
             NUMBER.matchEntire(text.trim())?.let { it.groupValues[1].uppercase() + it.groupValues[2] }
+
+        private val MARKS = Regex("[\\p{Mn}ʼʽ’'ʹ·]")
+
+        /** Lowercase, without accents or breathing marks, for matching ("agápē" -> "agape"). */
+        fun plain(text: String): String = MARKS.replace(java.text.Normalizer.normalize(text.lowercase(), java.text.Normalizer.Form.NFD), "")
 
         /** Strong's numbers mentioned in a piece of entry text, for linking. */
         val MENTION = Regex("\\b[HG]\\d{1,4}\\b")

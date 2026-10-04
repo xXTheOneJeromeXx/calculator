@@ -41,6 +41,10 @@ app at all. Only you can weigh that.
    and the setup screen opens.)
 2. Type a code of at least 6 digits, then the same code again. 8 or more digits is much
    better. Do not use your phone PIN, a birthday, or something like 123456.
+3. The app asks whether to disguise it now. **Disguise now** shows how to open it as a
+   dictionary, then switches (the app goes to the home screen). **Later** leaves it as
+   Kanaiic Reader; you can switch any time in Settings > Disguise. Either way, Settings always
+   shows how to open the app, at the top.
 
 There is no way to recover a forgotten code. Nobody can reset it, including the people who
 made the app. If you forget it, everything inside is gone. Make a backup (see below).
@@ -57,8 +61,12 @@ If the code is wrong, nothing happens: the dictionary shows an empty search. If 
 anything other than digits in between, or wait 15 seconds, it goes back to normal and you can
 start again.
 
-The dictionary is a working dictionary and thesaurus with a Notes tab. Only its Search button
-opens the reader; the Notes tab is an ordinary notepad.
+The dictionary is a working dictionary and thesaurus with Notes and PDF tabs. Only its Search
+button opens the reader; the Notes tab is an ordinary notepad, and the PDF tab opens PDF files
+saved on the phone (tap **Open**, pick a file; pinch to zoom). Both are part of the disguise,
+so they are **not** locked or encrypted: anyone using the dictionary can read them. Keep
+private notes and documents inside the reader, not there. The app doesn't remember which PDFs
+you opened, but the phone's file picker may list them under recent files.
 
 It closes itself and shows the front screen again:
 
@@ -77,9 +85,11 @@ Screenshots, screen recording and the app-switcher preview are blocked while it 
 - Tap BSB (top right) to switch translation. You stay on the same passage.
 - Search: type a reference like `John 3:16` or `1 cor 13:4-7` to go there, or words to
   search the current translation.
-- Original words: select verses and tap **Original** to see the Hebrew or Greek word behind
-  each King James word, with its Strong's number. Tap one for its meaning and every verse
-  that uses it. You can also type a number like `H430` or `G26` in Search.
+- Strong's: select verses and tap **Strong's** to see the Hebrew or Greek word behind each
+  King James word, with its Strong's number. Tap one for its meaning and every verse that
+  uses it. The **Strong's** tab searches the whole lexicon: type a number (`H430`, `G26`), an
+  English word as the King James Version translates it (`love`), or a transliteration
+  (`agape`).
 - Settings: theme (Paper, Sepia, Dark, Black), text size and line spacing.
 
 ## Highlights, notes and Saved
@@ -143,6 +153,7 @@ never deletes or replaces anything.
 ## What it does not protect against
 
 - Someone watching you type the code. In a disguise the digits show on the screen.
+- Anything in the dictionary's Notes or PDF tabs. They are ordinary, unlocked features.
 - On Kanaiic Reader, anyone who checks the app's details. See "Two versions".
 - Someone who makes you open it, or who takes the phone while it is open.
 - A skilled examiner with time. They can take the app apart, see that it hides a reader,

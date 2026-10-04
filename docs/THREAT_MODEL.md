@@ -134,6 +134,15 @@ c0         = version | salt | m | t | p | GCM_KEK_device( GCM_KEK_code( DEK ) )
     risk to the direct edition, whose id appears on no store (though its App info label and
     APK now carry the same name).
 
+13. **PDF tab (1.7).** The Dictionary face's PDF viewer opens files through the system picker
+    (ACTION_OPEN_DOCUMENT, read-only, no persisted permission) and renders them with the
+    platform `PdfRenderer` in the app's own process. A malicious PDF that exploited the
+    platform renderer would run with the app's privileges; the vault is locked whenever the
+    front screen shows, but the app's private files would be reachable. The viewer stores no
+    file names or URIs, and the open document is dropped when the reader opens or the process
+    ends, but the system picker keeps its own recent-files list, and files viewed there are
+    not protected by the app.
+
 ## Suggested review scope
 
 - `vault/` (KeyVault, VaultSession, Crypto, DeviceKey, Backup) and `unlock/UnlockController`.

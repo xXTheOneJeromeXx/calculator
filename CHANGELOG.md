@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.7.0 (2026-10-04): PDF viewer, disguise offer, Strong's tab
+
+- The dictionary disguise gains a **PDF** tab next to Dictionary, Thesaurus and Notes. Tap
+  Open, pick a PDF saved on the phone, scroll through it, pinch to zoom. It stays open while
+  you look words up in the other tabs.
+- It needs no permissions: files come through the phone's own file picker, are only read, and
+  the app keeps no list of what was opened.
+- Like the Notes tab, it is part of the disguise and is not locked: keep private documents out
+  of it.
+- Password-protected PDFs aren't supported; the app says so.
+- After you set your code on a new install, the app asks whether to **disguise it now** or
+  later. Disguising now first shows how to open it as the dictionary. Settings now always
+  starts with how to open the app, and each disguise option shows its own way in.
+- A **Strong's** tab in the reader searches the whole Hebrew and Greek lexicon by number,
+  English word or transliteration. The button on selected verses now says "Strong's" (it said
+  "Original", which was cut off on some screens).
+
 ## 1.6.0 (2026-10-04): both versions work the same way
 
 - The direct version (`dictionary.apk`) now works exactly like Kanaiic Reader from Google

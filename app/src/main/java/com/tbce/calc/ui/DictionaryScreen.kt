@@ -37,6 +37,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,10 +70,11 @@ private fun dictColors(dark: Boolean) = if (dark)
 else
     DictColors(Color(0xFFFCFCFD), Color(0xFFF0F1F4), Color(0xFF1B1D21), Color(0xFF6B7078), Color(0xFF2F5FB3), Color(0xFFE3E5E9))
 
-private enum class RefTab(val title: String) { DICTIONARY("Dictionary"), THESAURUS("Thesaurus"), NOTES("Notes") }
+private enum class RefTab(val title: String) { DICTIONARY("Dictionary"), THESAURUS("Thesaurus"), NOTES("Notes"), PDF("PDF") }
 
 /**
- * The reference disguise: a working offline dictionary and thesaurus (WordNet 3.0) and a notepad.
+ * The reference disguise: a working offline dictionary and thesaurus (WordNet 3.0), a notepad and
+ * a PDF viewer.
  * Behind it is the same reader and code. To open the reader, hold Search (the box clears), type
  * the code, and hold Search again. A normal tap of Search just looks the word up.
  */
@@ -93,6 +95,8 @@ fun DictionaryScreen(app: AppController) {
     var about by remember { mutableStateOf(false) }
     var prevArmed by remember { mutableStateOf(app.armed) }
     val editor = remember { arrayOfNulls<EditText>(1) }
+    val pdf = remember { PdfHolder() }
+    DisposableEffect(pdf) { onDispose { pdf.close() } }
 
     fun setField(text: String) {
         field = text
@@ -143,7 +147,7 @@ fun DictionaryScreen(app: AppController) {
         daily = withContext(Dispatchers.Default) { wordOfTheDay(dict) }
     }
 
-    val searching = tab != RefTab.NOTES
+    val searching = tab != RefTab.NOTES && tab != RefTab.PDF
     BackHandler(enabled = searching && (app.armed || entry != null || notFound != null || field.isNotEmpty())) {
         when {
             app.armed -> app.faceDisarm()
@@ -223,6 +227,7 @@ fun DictionaryScreen(app: AppController) {
             val shown = entry
             when {
                 tab == RefTab.NOTES -> NotesScreen()
+                tab == RefTab.PDF -> PdfScreen(pdf, PdfColors(c.bg, c.text, c.dim, c.accent, c.line))
                 shown != null && tab == RefTab.THESAURUS -> ThesaurusView(shown, c, onWord = ::open)
                 shown != null -> EntryView(shown, c, onWord = ::open)
                 notFound != null -> NotFound(notFound!!, suggestions, c, onWord = ::open)
