@@ -32,10 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tbce.calc.AppController
 import com.tbce.calc.Config
+import com.tbce.calc.Disguise
 import kotlinx.coroutines.launch
 
 /** Holds a code being typed, in a byte array that is zeroed when done. */
-private class CodeBuffer {
+internal class CodeBuffer {
     val bytes = ByteArray(Config.MAX_CODE_DIGITS)
     var length = 0
     fun add(d: Int) { if (length < bytes.size) bytes[length++] = ('0'.code + d).toByte() }
@@ -56,13 +57,14 @@ private class CodeBuffer {
 
 private enum class Stage { ENTER, CONFIRM, WORKING }
 
-/** First-run setup, reached by holding '=' on a fresh install. */
+/** First-run setup, reached by the active face's way in on a fresh install. */
 @Composable
 fun SetupScreen(app: AppController) {
     CodeEntry(
         ui = app.ui,
         colors = LocalCalcColors.current.let { CodeColors(it.background, it.text, it.dim) },
         changing = false,
+        face = app.disguise,
         onDone = { code -> app.finishSetup(code) },
         onCancel = { app.cancelSetup() },
     )
@@ -72,13 +74,15 @@ class CodeColors(val bg: androidx.compose.ui.graphics.Color, val text: androidx.
 
 /**
  * Enter a new code twice on a number pad. Used for first-run setup and for changing the code.
- * Wording comes from the encrypted pack ([ui]); [onDone] gets the code and must not keep it.
+ * Wording comes from the encrypted pack ([ui]); the "how to open" hint is the one for [face].
+ * [onDone] gets the code and must not keep it.
  */
 @Composable
 fun CodeEntry(
     ui: Map<String, String>,
     colors: CodeColors,
     changing: Boolean,
+    face: Disguise,
     onDone: suspend (ByteArray) -> Unit,
     onCancel: () -> Unit,
 ) {
@@ -135,9 +139,10 @@ fun CodeEntry(
             Spacer(Modifier.height(12.dp))
             if (stage == Stage.ENTER) {
                 Hint(t("code_min"), colors)
-                Hint(t("code_how"), colors)
+                Hint(t(howKey(face)), colors)
                 Hint(t("code_lost"), colors)
-                Hint(t("code_watch"), colors)
+                // The undisguised face shows dots only; every disguise shows the digits.
+                if (face != Disguise.READER) Hint(t("code_watch"), colors)
             }
             if (message.isNotEmpty()) Hint(message, colors, strong = true)
             Spacer(Modifier.height(16.dp))
@@ -183,6 +188,9 @@ fun CodeEntry(
         }
     }
 }
+
+/** Pack key for how to open the reader from [face], e.g. "code_how_notes"; calculator is "code_how". */
+fun howKey(face: Disguise) = if (face == Disguise.CALCULATOR) "code_how" else "code_how_" + face.name.lowercase()
 
 @Composable
 private fun Hint(text: String, colors: CodeColors, strong: Boolean = false) {

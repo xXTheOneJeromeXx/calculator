@@ -1,6 +1,6 @@
 # Manual test script (phase gate 1)
 
-Automated: `./gradlew testDebugUnitTest` runs 60+ calculator expressions
+Automated: `./gradlew testDirectDebugUnitTest testPlayDebugUnitTest` runs 60+ calculator expressions
 (`CalculatorTest`), every unlock-gesture transition (`UnlockControllerTest`), and the
 crypto tests: RFC 9106 Argon2id vector, right/wrong code, tamper, lost device key,
 wipe zeroes keys, no code/key/plaintext in stored files (`KeyVaultTest`).
@@ -59,3 +59,26 @@ CI (`.github/workflows/ci.yml`) with `tools/scan_apk.sh`.
 3. Change code: the old code no longer opens, the new one does.
 4. Turn on "Erase after 10 wrong codes", enter 10 wrong codes: holding = now starts setup.
 5. Set up again and import the backup: notes, highlights and saved items come back.
+
+## 1.3 (editions, reference disguise)
+
+Automated: `DictionaryTest` (lookups, base forms, capitalisation, prefix suggestions, digits
+find nothing), `DisguiseTest` (default faces first). `tools/scan_apk.sh` on both release
+APKs (`app/build/outputs/apk/{direct,play}/release/`): the direct one must not contain
+"kanaiic".
+
+1. Update from 1.2: install the 1.2.0 release, set a code, then install the 1.3.0 direct
+   release over it. Before opening, `adb shell cmd package query-activities -a
+   android.intent.action.MAIN -c android.intent.category.LAUNCHER --components` lists only
+   `.FaceCalculator`; hold `=` with the old code opens the reader.
+2. Direct, fresh install: opens as Dictionary. Hold Search: setup, with the Search hint.
+3. Dictionary: "ran" opens run ("a form of run"); suggestions while typing; synonyms open
+   their own entries; Thesaurus tab shows synonyms, Related and Opposite; Notes tab works and
+   holding Done there does nothing; About shows the WordNet notice; recent lookups listed.
+4. Hold Search (box clears), type a wrong code, hold Search: an empty search, nothing else.
+   Same with the right code: the reader opens. In a debug build, `shared_prefs/w.xml` holds
+   only opened headwords.
+5. Settings > Disguise on direct lists Dictionary, Calculator, Notes, Clock, Sudoku.
+6. Play, fresh install: "Kanaiic Reader" icon and lock screen; Choose a code; wrong code says
+   so; right code opens. Disguise list adds "Kanaiic Reader"; switching to Calculator and
+   back works.

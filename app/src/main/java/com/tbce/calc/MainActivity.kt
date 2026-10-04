@@ -17,6 +17,8 @@ import com.tbce.calc.ui.CalculatorScreen
 import com.tbce.calc.ui.NotesScreen
 import com.tbce.calc.ui.TimerScreen
 import com.tbce.calc.ui.SudokuScreen
+import com.tbce.calc.ui.DictionaryScreen
+import com.tbce.calc.ui.ReaderLockScreen
 import com.tbce.calc.ui.SetupScreen
 import com.tbce.calc.ui.ReaderScreen
 import com.tbce.calc.reader.Packs
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var app: AppController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Never restore anything: a cold start always begins at the calculator.
+        // Never restore anything: a cold start always begins at the front screen.
         super.onCreate(null)
         // Release builds die quietly on a crash, so no stack trace (which can carry text) reaches the log.
         if ((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
@@ -47,6 +49,8 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(app.screen) { setSecure(app.screen != Screen.CALC) }
                 when (app.screen) {
                     Screen.CALC -> when (app.disguise) {
+                        Disguise.READER -> ReaderLockScreen(app)
+                        Disguise.DICTIONARY -> DictionaryScreen(app)
                         Disguise.CALCULATOR -> CalculatorScreen(app)
                         Disguise.NOTES -> NotesScreen(app)
                         Disguise.CLOCK -> TimerScreen(app)

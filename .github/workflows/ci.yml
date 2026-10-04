@@ -1,7 +1,8 @@
 name: ci
 
 # Hardening checks from the brief (sections 9 and 12): unit tests, a release build, and the
-# APK scan (no telltale words, no permissions, backups off, only the launcher exported).
+# APK scan (no telltale words, no permissions, backups off, only the launcher exported),
+# for both editions (direct and play).
 on:
   push:
     branches: [main]
@@ -19,10 +20,9 @@ jobs:
       - name: Android platform
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.2" "build-tools;36.1.0" > /dev/null || true
       - name: Unit tests
-        run: ./gradlew --no-daemon testDebugUnitTest
+        run: ./gradlew --no-daemon testDirectDebugUnitTest testPlayDebugUnitTest
       - name: Release build (unsigned)
         run: ./gradlew --no-daemon assembleRelease
       - name: APK scan
         run: |
-          apk=$(ls app/build/outputs/apk/release/*.apk | head -1)
-          tools/scan_apk.sh "$apk"
+          for apk in app/build/outputs/apk/*/release/*.apk; do tools/scan_apk.sh "$apk"; done

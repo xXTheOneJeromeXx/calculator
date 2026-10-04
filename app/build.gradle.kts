@@ -19,11 +19,26 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.tbce.calc"
         minSdk = 24
         targetSdk = 36
-        versionCode = 11
-        versionName = "1.2.0"
+        versionCode = 12
+        versionName = "1.3.0"
+    }
+
+    // Two editions from one codebase. Their application ids
+    // must stay different: a disguised direct install must never point at the public Play listing.
+    flavorDimensions += "edition"
+    productFlavors {
+        // GitHub / kanaiic.com. Starts as the reference app; no undisguised face.
+        create("direct") {
+            dimension = "edition"
+            applicationId = "com.tbce.calc"
+        }
+        // Google Play, as Kanaiic Reader. Starts undisguised; disguises optional (src/play).
+        create("play") {
+            dimension = "edition"
+            applicationId = "com.kanaiic.reader"
+        }
     }
 
     signingConfigs {

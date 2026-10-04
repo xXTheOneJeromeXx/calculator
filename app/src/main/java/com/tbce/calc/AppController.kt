@@ -104,6 +104,27 @@ class AppController(private val vault: KeyVault, private val scope: CoroutineSco
         }
     }
 
+    fun hasVault() = vault.exists()
+
+    fun startSetup() { screen = Screen.SETUP }
+
+    /**
+     * The undisguised face's plain code entry: no hidden gesture, just the code and Open.
+     * [onWrong] runs on the main thread if the code is wrong. The caller zeros [code] afterwards;
+     * this works on its own copy.
+     */
+    fun tryCode(code: ByteArray, onWrong: () -> Unit) {
+        if (!vault.exists()) { screen = Screen.SETUP; return }
+        val copy = code.copyOf()
+        val gen = generation
+        scope.launch {
+            val s = withContext(Dispatchers.Default) { try { vault.unlock(copy) } finally { copy.fill(0) } }
+            if (s == null) { if (gen == generation) onWrong(); return@launch }
+            if (gen != generation) { s.wipe(); return@launch }
+            open(s)
+        }
+    }
+
     fun faceDisarm() {
         armed = false
         faceTimer?.cancel()

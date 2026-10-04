@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.3.0 (2026-10-04): Kanaiic Reader, and a dictionary disguise
+
+- Two versions from the same code:
+  - **Kanaiic Reader** (for Google Play) opens as itself, with its own name and icon and a
+    plain screen asking for your code. Disguises are optional in Settings. Its store page
+    describes the disguises, so they only hide it from a glance.
+  - **The direct version** (GitHub, kanaiic.com) stays fully disguised and now starts as a
+    dictionary. Phones updated from 1.2 keep the Calculator.
+- New **Dictionary** disguise: a working offline dictionary and thesaurus built from
+  Princeton's WordNet 3.0 (about 147,000 words with definitions, examples, synonyms, related
+  words and opposites; "ran" finds run), plus a Notes tab, recent lookups and a word of the
+  day. To open the reader: hold Search until the box clears, type your code, hold Search
+  again. A dictionary also explains why the app is about 14 MB.
+- Setting up a code now explains the way in for the disguise you are using (it always said
+  "hold =" before).
+- The direct download is now `dictionary.apk`.
+
 ## 1.2.0 (2026-10-04): more disguises — Clock and Sudoku
 
 - Two more faces in Settings > Disguise, both opening the same reader:

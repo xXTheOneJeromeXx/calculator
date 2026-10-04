@@ -1,10 +1,11 @@
-# Installing Calculator (for people who have only used the Play Store)
+# Installing the direct version (for people who have only used the Play Store)
 
 This takes about two minutes. You only do it once; you do not need a Google account,
 internet after installing, or any other app.
 
-The download page and the steps below only ever say "Calculator". Whoever gave you the
-link will tell you what else it does.
+This is the version that is not on any app store. It installs as a dictionary called
+"Dictionary", and the steps below only ever say that. Whoever gave you the link will tell you
+what else it does. (Kanaiic Reader, the Play Store version, installs like any other app.)
 
 ## 1. Download
 
@@ -17,7 +18,7 @@ link will tell you what else it does.
 
 4. When the download finishes, tap **Open** in the message at the bottom of the screen.
    If you missed it, open the **Files** app (on Samsung: **My Files**), go to **Downloads**,
-   and tap **calculator.apk**.
+   and tap **dictionary.apk**.
 
 ## 3. Allow this one install
 
@@ -32,22 +33,23 @@ link will tell you what else it does.
 9. If **Google Play Protect** shows a warning, tap **More details** (or the small arrow),
    then **Install anyway**. If it offers to **scan** the app, you can let it; then install.
 10. Tap **Open** or **Done**. The app is now on your home screen or in your app list as
-    **Calculator**.
+    **Dictionary**.
 
 ## 5. Tidy up (important)
 
 11. Turn the permission back off: **Settings > Apps > Special app access > Install unknown
     apps > Chrome** (or the app you downloaded with) and turn **Allow from this source** off.
-12. Delete the downloaded file: **Files > Downloads**, press and hold **calculator.apk**,
+12. Delete the downloaded file: **Files > Downloads**, press and hold **dictionary.apk**,
     and tap **Delete**.
 
 ## Updates
 
-New versions are installed the same way, over the top. Your code and notes stay.
+New versions are installed the same way, over the top. Your code and notes stay, and so does
+the disguise you chose. (If you installed before version 1.3, the app stays a calculator.)
 
 ## If something goes wrong
 
-- **"App not installed"**: there is not enough space, or a different app named Calculator
+- **"App not installed"**: there is not enough space, or a different app named Dictionary
   from another source is in the way. Free some space and try again.
 - **"Install blocked" with no Install anyway button**: ask the person who gave you the link.
   (The app is registered with Android developer verification, so no extra developer

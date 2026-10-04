@@ -20,7 +20,7 @@ class KeyVault(
     private val iterations: Int = Config.KDF_ITERATIONS,
     private val parallelism: Int = Config.KDF_PARALLELISM,
 ) {
-    private val keyFile = File(dir, "c0")
+    private val keyFile = File(dir, KEY_FILE)
     /** Wipe setting and failed-attempt count, sealed with the device key: [enabled byte][count int]. */
     private val guardFile = File(dir, "c1")
     private val dataDir = File(dir, "d")
@@ -117,8 +117,12 @@ class KeyVault(
         dataDir.deleteRecursively()
     }
 
-    private companion object {
-        const val HEADER = 1 + 16 + 4 + 4 + 4
+    companion object {
+        private const val HEADER = 1 + 16 + 4 + 4 + 4
+        private const val KEY_FILE = "c0"
+
+        /** Whether a vault has been set up in [dir], without needing the device key. */
+        fun existsIn(dir: File): Boolean = File(dir, KEY_FILE).exists()
     }
 }
 

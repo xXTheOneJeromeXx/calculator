@@ -1,18 +1,24 @@
 #!/usr/bin/env bash
 # Phase gate check: the release APK must hold no religious terms, no INTERNET permission,
 # backups off, and nothing exported but the launcher activity.
-# Usage: tools/scan_apk.sh [path/to/app-release.apk]
+# Usage: tools/scan_apk.sh [path/to/release.apk]   (either edition; direct is the default)
 set -euo pipefail
-APK=${1:-app/build/outputs/apk/release/app-release.apk}
+APK=${1:-app/build/outputs/apk/direct/release/app-direct-release.apk}
 BT=$(ls -d "${ANDROID_HOME:-$HOME/Android/Sdk}"/build-tools/* | sort -V | tail -1)
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 unzip -q "$APK" -d "$TMP/apk"
 fail=0
 WORDS='hold =|vault|bible|scripture|jesus|christ|gospel|church|psalm|genesis|testament|apostle|prophet|messiah|sermon|prayer|holy spirit|berean|king james|world english|literata|nicodemus|israel|yahweh'
-# Text of the manifest and resources, plus every string in dex and other files.
 "$BT/aapt2" dump xmltree --file AndroidManifest.xml "$APK" > "$TMP/manifest.txt"
 "$BT/aapt2" dump strings "$APK" > "$TMP/res.txt"
-hits=$( (cat "$TMP/manifest.txt" "$TMP/res.txt"; find "$TMP/apk" -type f -exec strings -n 4 {} \; ; find "$TMP/apk" -type f | sed "s|$TMP/apk/||") | grep -ioE "$WORDS" | sort | uniq -c || true)
+pkg=$("$BT/aapt2" dump packagename "$APK")
+echo "package: $pkg"
+# The direct edition must not name the play edition either (its name leads to the Play listing).
+[ "$pkg" = com.tbce.calc ] && WORDS="$WORDS|kanaiic"
+# The dictionary's word data (assets/w) is an ordinary English dictionary, which naturally
+# defines words like "church"; it is decoy content and skipped here. Everything else is checked:
+# manifest and resources, plus every string in dex and other files, and the file names.
+hits=$( (cat "$TMP/manifest.txt" "$TMP/res.txt"; find "$TMP/apk" -type f -not -path "$TMP/apk/assets/w/*" -exec strings -n 4 {} \; ; find "$TMP/apk" -type f | sed "s|$TMP/apk/||") | grep -ioE "$WORDS" | sort | uniq -c || true)
 if [ -n "$hits" ]; then echo "FAIL: telltale words found:"; echo "$hits"; fail=1; else echo "ok: no telltale words"; fi
 if grep -q 'android.permission.INTERNET' "$TMP/manifest.txt"; then echo "FAIL: INTERNET permission"; fail=1; else echo "ok: no INTERNET permission"; fi
 perms=$("$BT/aapt2" dump permissions "$APK" | grep -c 'uses-permission' || true)

@@ -58,10 +58,11 @@ else
 /**
  * The Notes disguise: a plain, working notepad. Behind it is the same reader and code. To open the
  * reader, start a new note, hold Done to arm (the note clears), type the code, and hold Done again.
- * A normal tap of Done just saves the note.
+ * A normal tap of Done just saves the note. With [hiddenEntry] false (the Notes tab of the
+ * reference disguise, whose way in is its Search button) holding Done does nothing.
  */
 @Composable
-fun NotesScreen(app: AppController) {
+fun NotesScreen(app: AppController, hiddenEntry: Boolean = true) {
     val context = LocalContext.current
     val store = remember { NotesStore(context) }
     val c = noteColors(isSystemInDarkTheme())
@@ -75,6 +76,7 @@ fun NotesScreen(app: AppController) {
     } else {
         NoteEditor(
             app = app,
+            hiddenEntry = hiddenEntry,
             note = current,
             c = c,
             onClose = { body ->
@@ -136,7 +138,7 @@ private fun NotesList(notes: List<NotesStore.Note>, c: NoteColors, onOpen: (Note
 }
 
 @Composable
-private fun NoteEditor(app: AppController, note: NotesStore.Note, c: NoteColors, onClose: (String) -> Unit, onDelete: () -> Unit) {
+private fun NoteEditor(app: AppController, hiddenEntry: Boolean, note: NotesStore.Note, c: NoteColors, onClose: (String) -> Unit, onDelete: () -> Unit) {
     var field by remember { mutableStateOf(note.body) }
     var prevArmed by remember { mutableStateOf(app.armed) }
     val editor = remember { arrayOfNulls<EditText>(1) }
@@ -163,7 +165,7 @@ private fun NoteEditor(app: AppController, note: NotesStore.Note, c: NoteColors,
                 label = "Done",
                 color = c.accent,
                 onClick = { onClose(field) },
-                onHold = { app.faceTrigger(field.filter { it.isDigit() }.toByteArray()) },
+                onHold = { if (hiddenEntry) app.faceTrigger(field.filter { it.isDigit() }.toByteArray()) },
             )
         }
         AndroidView(

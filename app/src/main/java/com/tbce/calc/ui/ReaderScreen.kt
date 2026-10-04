@@ -107,6 +107,7 @@ import androidx.core.view.WindowCompat
 import com.tbce.calc.AppController
 import com.tbce.calc.Config
 import com.tbce.calc.Disguise
+import com.tbce.calc.Disguises
 import com.tbce.calc.R
 import com.tbce.calc.reader.Block
 import com.tbce.calc.reader.Break
@@ -275,6 +276,7 @@ fun ReaderScreen(app: AppController) {
                 ui = state.meta.ui,
                 colors = CodeColors(c.bg, c.text, c.dim),
                 changing = true,
+                face = app.disguise,
                 onDone = { code -> app.changeCode(code); state.overlay = null; state.notice = "Code changed. Use the new code from now on." },
                 onCancel = { state.overlay = null },
             )
@@ -719,10 +721,11 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
             "How the app looks on your home screen. Only one shows at a time; the icon and name change right away.",
             color = c.dim, fontSize = 13.sp, lineHeight = 18.sp, modifier = Modifier.padding(bottom = 4.dp),
         )
-        for (d in Disguise.entries) {
+        val faces = remember { Disguises.available(context).map { it to Disguises.label(context, it) } }
+        for ((d, name) in faces) {
             val on = app.disguise == d
             Text(
-                (if (on) "✓  " else "     ") + d.label,
+                (if (on) "✓  " else "     ") + name,
                 color = if (on) c.accent else c.text,
                 fontSize = 16.sp,
                 fontWeight = if (on) FontWeight.Medium else FontWeight.Normal,
@@ -749,9 +752,11 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
     pendingDisguise?.let { d ->
         AlertDialog(
             onDismissRequest = { pendingDisguise = null },
-            title = { Text("Look like ${d.label}?") },
+            title = { Text(if (d == Disguise.READER) "Show as ${Disguises.label(context, d)}?" else "Look like ${Disguises.label(context, d)}?") },
             text = {
                 val reminder = when (d) {
+                    Disguise.READER -> "entry_reader"
+                    Disguise.DICTIONARY -> "entry_dictionary"
                     Disguise.NOTES -> "entry_notes"
                     Disguise.CLOCK -> "entry_clock"
                     Disguise.SUDOKU -> "entry_sudoku"
