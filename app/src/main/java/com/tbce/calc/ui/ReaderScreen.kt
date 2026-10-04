@@ -272,6 +272,8 @@ fun ReaderScreen(app: AppController) {
             is Overlay.Editor -> EditorOverlay(state, o, c, touch)
             is Overlay.SavedDetail -> SavedDetailOverlay(state, o, c, touch)
             is Overlay.Passphrase -> PassphraseOverlay(state, o, c, touch, exportReady)
+            is Overlay.Words -> WordsOverlay(state, o, c)
+            is Overlay.Lexicon -> LexiconOverlay(state, o, c)
             Overlay.ChangeCode -> CodeEntry(
                 ui = state.meta.ui,
                 colors = CodeColors(c.bg, c.text, c.dim),
@@ -545,6 +547,7 @@ private fun SearchPane(state: ReaderState, c: ReaderColors, touch: () -> Unit) {
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         )
         LazyColumn(Modifier.fillMaxSize()) {
+            item { StrongsSearchRow(state, query, c) }
             if (ref != null) {
                 item {
                     val name = t.books.firstOrNull { it.code == ref.book }?.name ?: ref.book

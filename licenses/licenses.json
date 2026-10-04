@@ -24,6 +24,17 @@
     "notice": "licenses/KJV.txt"
   },
   {
+    "name": "Strong's Hebrew and Greek Dictionaries (1890)",
+    "abbr": "Strong's",
+    "license": "Public Domain",
+    "source": "https://github.com/openscriptures/strongs",
+    "notice": "licenses/Strongs.txt",
+    "sha256": {
+      "StrongHebrewG.xml": "1f9659ea208f4c498843a0280dacb1448627c33ca77712642d8705793ab66061",
+      "strongsgreek.xml": "df928f01b37632f8af9f16289ce58d10b958014cb5dbd1e1ea715a8d311a0625"
+    }
+  },
+  {
     "name": "Literata",
     "license": "SIL Open Font License 1.1",
     "source": "https://github.com/google/fonts/tree/main/ofl/literata",

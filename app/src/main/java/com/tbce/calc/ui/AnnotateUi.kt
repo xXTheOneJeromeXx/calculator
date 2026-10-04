@@ -221,6 +221,10 @@ fun SelectionBar(state: ReaderState, c: ReaderColors) {
                 a.save(kind, s.book, s.chapter, s.verses, state.translationId)
                 state.selection = null
             }) { Text("Save", color = c.accent, fontSize = 16.sp) }
+            TextButton(onClick = {
+                state.overlay = Overlay.Words(s.book, s.chapter, s.verses.sorted())
+                state.selection = null
+            }) { Text(state.meta.ui("orig"), color = c.accent, fontSize = 16.sp) }
             TextButton(onClick = { state.selection = null }) { Text("Done", color = c.dim, fontSize = 16.sp) }
         }
     }

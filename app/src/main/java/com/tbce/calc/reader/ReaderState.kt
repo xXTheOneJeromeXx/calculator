@@ -35,6 +35,10 @@ sealed interface Overlay {
     /** Passphrase for a backup. [file] holds the picked file's bytes when importing. */
     class Passphrase(val export: Boolean, val file: ByteArray? = null) : Overlay
     data object ChangeCode : Overlay
+    /** The original-language words of the selected verses (Strong's numbers, from the KJV). */
+    class Words(val book: String, val chapter: Int, val verses: List<Int>) : Overlay
+    /** One Strong's entry and every verse that uses it. [back] is the layer to return to. */
+    class Lexicon(val number: String, val back: Overlay? = null) : Overlay
 }
 
 /**
@@ -87,6 +91,13 @@ class ReaderState(context: Context, private val session: VaultSession, systemDar
         cache.getOrPut("$translationId/$code") { packs.book(translationId, code) }.also {
             while (cache.size > 6) cache.remove(cache.keys.first())
         }
+    }
+
+    private var strongsData: Strongs? = null
+
+    /** Strong's numbers, loaded on first use; dropped with the rest on lock. */
+    fun strongs(): Strongs = synchronized(this) {
+        strongsData ?: Strongs(packs, meta.translations.first { it.id == "kjv" }.books.map { it.code }).also { strongsData = it }
     }
 
     private var index: SearchIndex? = null
@@ -194,7 +205,7 @@ class ReaderState(context: Context, private val session: VaultSession, systemDar
         selection = null
         overlay = null
         synchronized(cache) { cache.clear() }
-        synchronized(this) { index = null; indexFor = null }
+        synchronized(this) { index = null; indexFor = null; strongsData = null }
         fontFile.delete()
     }
 

@@ -15,8 +15,11 @@ import os
 import re
 import secrets
 import sys
+import unicodedata
 import zipfile
 import zlib
+import xml.etree.ElementTree as ET
+from collections import Counter, defaultdict
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
@@ -64,8 +67,14 @@ ALIASES = {
 UI = {
     "book": "Book", "chapter": "Chapter", "ot": "Old Testament", "nt": "New Testament",
     "translation": "Translation", "about": "About these texts", "guide": "How this app works",
-    "search_hint": "Search, or type a reference like John 3:16",
-    "go_to": "Go to", "no_results": "No matches", "results": "matches",
+    "search_hint": "Search, a reference like John 3:16, or a Strong's number like G26",
+    "go_to": "Go to", "no_results": "No matches", "results": "matches", "loading": "Loading…",
+    # Strong's numbers (1.4).
+    "orig": "Original", "orig_none": "No original-language words are listed here.",
+    "orig_note": "The Hebrew or Greek behind each word, with its Strong's number, as tagged in the King James Version. Tap a word for its meaning and every verse that uses it.",
+    "lex_strongs": "Strong's", "lex_hebrew": "Hebrew", "lex_greek": "Greek",
+    "lex_meaning": "Strong's definition", "lex_kjv": "KJV renderings (Strong's)",
+    "lex_renders": "Translated in the KJV as", "lex_verses": "Used in {n} verses",
     # Setup and code screens: kept out of the APK so they don't describe the hidden gesture.
     "code_new": "Choose a code", "code_again": "Enter the code again", "code_change": "Choose a new code",
     "code_min": "Use at least {min} digits. {good} or more is better.",
@@ -76,7 +85,7 @@ UI = {
     "code_how_dictionary": "To open later: hold Search until the box clears, type your code in the box, then hold Search again.",
     "code_how_reader": "You'll type this code each time you open the app.",
     "code_lost": "A forgotten code can't be recovered, and nothing inside can be opened without it.",
-    "code_watch": "Anyone watching can see the digits on the calculator display as you type.",
+    "code_watch": "Anyone watching can see the digits on screen as you type.",
     "code_mismatch": "Those didn't match. Start again.",
     "code_weak": "Easy to guess", "code_short": "Too short", "code_ok": "OK. Longer is better.", "code_good": "Good length",
     # Disguise reminders: name the hidden gesture, so they live in the pack, not the APK.
@@ -239,6 +248,151 @@ def copr_text(zf):
     return "\n".join(l for l in lines if l and l not in ("^", "<", ">"))
 
 
+# ---------------------------------------------------------------- Strong's (1.4)
+# Lexicon: Strong's Hebrew and Greek dictionaries (1890, public domain), from
+# content/sources/strongs/ (see SOURCE.txt). Only Strong's own text is used: the Hebrew file's
+# numbered outlines (another source) and its TWOT numbers (copyrighted) are left out.
+# Tags: the KJV's \w word|strong="H0430"\w* markup. BSB and WEB carry machine-aligned tags with
+# visible errors, so they are not used.
+
+STRONGS = os.path.join(SRC, "strongs")
+OSIS = "{http://www.bibletechnologies.net/2003/OSIS/namespace}"
+STRONGS_URL = "https://github.com/openscriptures/strongs"
+STRONGS_NOTICE = (
+    "Dictionaries of Hebrew and Greek Words, from Strong's Exhaustive Concordance by James Strong (1890). "
+    "Public domain.\n"
+    "Hebrew: XML edition by David Troidl for Open Scriptures (marked Public Domain). "
+    "Greek: XML edition by Ulrik Petersen (\"Public Domain -- Copy Freely\").\n"
+    "Only Strong's own text is used; the TWOT numbers (copyright Moody Bible Institute) are left out.\n"
+    "The word-by-word Strong's tags come from the King James Version text (eBible.org, public domain)."
+)
+
+
+def snum(raw):
+    """'H0430' -> 'H430'."""
+    return raw[0].upper() + str(int(raw[1:]))
+
+
+def _mixed(el, render):
+    out = [el.text or ""]
+    for ch in el:
+        out.append(render(ch))
+        out.append(ch.tail or "")
+    return "".join(out)
+
+
+def _tidy(t):
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def hebrew_lexicon():
+    root = ET.parse(os.path.join(STRONGS, "StrongHebrewG.xml")).getroot()
+
+    def render(el):
+        tag = el.tag.replace(OSIS, "")
+        if tag == "w":
+            src, lemma, xlit = el.get("src"), el.get("lemma"), el.get("xlit")
+            inner = ", ".join(x for x in (lemma, xlit) if x)
+            if src:
+                return f"H{int(src)}" + (f" ({inner})" if inner else "")
+            return inner or (el.text or "")
+        return _mixed(el, render)
+
+    lex = {}
+    for div in root.iter(OSIS + "div"):
+        if div.get("type") != "entry":
+            continue
+        w = div.find(OSIS + "w")
+        notes = {n.get("type"): _tidy(_mixed(n, render)) for n in div.findall(OSIS + "note")}
+        lex[f"H{int(div.get('n'))}"] = [
+            w.get("lemma") or "", w.get("xlit") or "", w.get("POS") or "",
+            notes.get("exegesis", ""), notes.get("explanation", ""), notes.get("translation", ""),
+        ]
+    return lex
+
+
+def greek_lexicon():
+    root = ET.parse(os.path.join(STRONGS, "strongsgreek.xml")).getroot()
+
+    def render(el):
+        if el.tag == "strongsref":
+            return ("H" if el.get("language") == "HEBREW" else "G") + str(int(el.get("strongs")))
+        if el.tag == "greek":
+            return el.get("unicode") or ""
+        if el.tag == "pronunciation":
+            return el.get("strongs") or ""
+        return _mixed(el, render)
+
+    lex = {}
+    for e in root.iter("entry"):
+        g = e.find("greek")
+        pr = e.find("pronunciation")
+
+        def part(tag):
+            x = e.find(tag)
+            return _tidy(_mixed(x, render)) if x is not None else ""
+        kjv = re.sub(r"^:--\s*", "", part("kjv_def"))
+        lex[f"G{int(e.get('strongs'))}"] = [
+            g.get("unicode") if g is not None else "", g.get("translit") if g is not None else "",
+            pr.get("strongs") if pr is not None else "",
+            part("strongs_derivation"), part("strongs_def"), kjv,
+        ]
+    return lex
+
+
+def strong_tags(text):
+    """Per chapter (list) a dict verse -> [[word, number], ...], from a KJV USFM book."""
+    chapters, chapter, verse = [], None, 0
+    for line in text.splitlines():
+        line = re.sub(r"\\(f|fe|x)\s.*?\\\1\*", "", line)
+        for m in re.finditer(r"\\c\s+(\d+)|\\v\s+(\d+)|\\\+?w\s+([^\\|]*?)\|strong=\"([HG]\d+)\"\\\+?w\*", line):
+            if m.group(1):
+                chapter = {}
+                chapters.append(chapter)
+                verse = 0
+            elif m.group(2):
+                verse = int(m.group(2))
+            elif chapter is not None and verse:
+                word = re.sub(r"\\\+?[a-z0-9]+\*?\s?", "", m.group(3)).strip()
+                if word:
+                    chapter.setdefault(str(verse), []).append([word, snum(m.group(4))])
+    return chapters
+
+
+def build_strongs(key, zf, files):
+    """Seals the KJV tag packs (s/<book>), the lexicon (lex) and the concordance (conc)."""
+    lex = hebrew_lexicon()
+    lex.update(greek_lexicon())
+    # NFC, so e.g. the source's Greek oxia (U+1F71) matches ordinary tonos (U+03AC).
+    lex = {n: [unicodedata.normalize("NFC", x) for x in e] for n, e in lex.items()}
+    verses = defaultdict(set)
+    renders = defaultdict(Counter)
+    forms = defaultdict(Counter)
+    total = 0
+    for b, code in enumerate(BOOKS):
+        chapters = strong_tags(zf.read(files[code]).decode("utf-8-sig"))
+        for c, ch in enumerate(chapters, 1):
+            for v, words in ch.items():
+                for word, n in words:
+                    verses[n].add(b * 65536 + c * 256 + int(v))
+                    renders[n][word.lower()] += 1
+                    forms[n][word] += 1
+        total += seal(key, f"s/{code}", jdump(chapters))
+    conc = {}
+    for n, ids in verses.items():
+        ids = sorted(ids)
+        deltas = [ids[0]] + [ids[i] - ids[i - 1] for i in range(1, len(ids))]
+        # Renderings by count, each shown in its most common capitalisation.
+        r = [[max((f for f in forms[n] if f.lower() == w), key=forms[n].get), k] for w, k in renders[n].most_common()]
+        conc[n] = {"v": deltas, "r": r}
+    missing = sorted(set(verses) - set(lex), key=lambda n: (n[0], int(n[1:])))
+    total += seal(key, "lex", jdump(lex))
+    total += seal(key, "conc", jdump(conc))
+    print(f"Strong's: {len(lex)} entries, {len(conc)} used in the KJV, {sum(len(v) for v in verses.values())} verse links"
+          + (f", {len(missing)} tags without an entry: {missing[:10]}" if missing else ""))
+    return total
+
+
 def main():
     key = load_key()
     write_kotlin_key(key)
@@ -272,6 +426,15 @@ def main():
                     "sha256": hashlib.sha256(open(os.path.join(SRC, f"{src}_usfm.zip"), "rb").read()).hexdigest(), "notice": f"licenses/{abbr}.txt"})
         with open(os.path.join(ROOT, "licenses", f"{abbr}.txt"), "w") as f:
             f.write(copr_text(zf) + "\n")
+        if tid == "kjv":
+            total += build_strongs(key, zf, files)
+            about.append(f"Strong's numbers\nSource: {STRONGS_URL}\n\n{STRONGS_NOTICE}")
+            lic.append({"name": "Strong's Hebrew and Greek Dictionaries (1890)", "abbr": "Strong's", "license": "Public Domain",
+                        "source": STRONGS_URL, "notice": "licenses/Strongs.txt",
+                        "sha256": {n: hashlib.sha256(open(os.path.join(STRONGS, n), "rb").read()).hexdigest()
+                                   for n in ("StrongHebrewG.xml", "strongsgreek.xml")}})
+            with open(os.path.join(ROOT, "licenses", "Strongs.txt"), "w") as f:
+                f.write(STRONGS_NOTICE + "\n")
         print(f"{abbr}: {verses} verses, {sum(b[2] for b in books_meta)} chapters")
 
     for code, extra in ALIASES.items():

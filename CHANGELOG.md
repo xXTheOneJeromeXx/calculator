@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.4.0 (2026-10-04): Strong's numbers
+
+- Select one or more verses and tap **Original**: each word the King James Version tags with a
+  Strong's number, showing the Hebrew or Greek word, its transliteration, the number and the
+  KJV's usual renderings. Works whichever translation you are reading.
+- Tap a word for its **Strong's entry**: the original word, pronunciation, Strong's
+  definition and his list of KJV renderings (numbers inside it link to their entries), how
+  often the KJV translates it each way, and every verse that uses it, shown in your current
+  translation. Tap a verse to go there.
+- Type a Strong's number in Search ("H430", "g26") to open its entry.
+- Sources: Strong's Hebrew and Greek dictionaries (1890, public domain; Open Scriptures and
+  Ulrik Petersen XML editions) and the Strong's-tagged KJV from eBible.org. The TWOT numbers in
+  the Hebrew file are copyrighted and left out. All of it ships in the encrypted packs (about
+  3 MB; the APK is now about 17 MB). The source KJV doesn't tag words that go untranslated, so a few numbers
+  (e.g. H853) show only the handful of verses where it does.
+- The setup screen's "anyone watching can see the digits" warning no longer mentions a
+  calculator display.
+- Builds use less memory (Gradle 2 GB, Kotlin daemon 1 GB).
+
 ## 1.3.0 (2026-10-04): Kanaiic Reader, and a dictionary disguise
 
 - Two versions from the same code:

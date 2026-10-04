@@ -1,0 +1,4 @@
+Dictionaries of Hebrew and Greek Words, from Strong's Exhaustive Concordance by James Strong (1890). Public domain.
+Hebrew: XML edition by David Troidl for Open Scriptures (marked Public Domain). Greek: XML edition by Ulrik Petersen ("Public Domain -- Copy Freely").
+Only Strong's own text is used; the TWOT numbers (copyright Moody Bible Institute) are left out.
+The word-by-word Strong's tags come from the King James Version text (eBible.org, public domain).
