@@ -45,7 +45,9 @@ what else it does. (Kanaiic Reader, the Play Store version, installs like any ot
 ## Updates
 
 New versions are installed the same way, over the top. Your code and notes stay, and so does
-the disguise you chose. (If you installed before version 1.3, the app stays a calculator.)
+the disguise you chose. Version 1.5 removed the calculator, notepad, clock and sudoku
+disguises: if your phone used one, the update turns it into the dictionary (hold **Search**,
+type your code, hold **Search** again).
 
 ## If something goes wrong
 

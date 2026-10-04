@@ -2,9 +2,6 @@ package com.tbce.calc
 
 /** Every tunable for the hidden gesture, the lock, and key derivation lives here. */
 object Config {
-    /** How long '=' must be held to arm, and again to submit. */
-    const val HOLD_MS = 1_500L
-
     /** How long the armed window stays open before it silently closes. */
     const val ARM_WINDOW_MS = 15_000L
 

@@ -717,23 +717,26 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
                 modifier = Modifier.fillMaxWidth().clickable { state.switchTranslation(t.id) }.padding(vertical = 10.dp),
             )
         }
-        Spacer(Modifier.height(16.dp))
-        HorizontalDivider(color = c.dim.copy(alpha = 0.2f))
-        Label("Disguise", c)
-        Text(
-            "How the app looks on your home screen. Only one shows at a time; the icon and name change right away.",
-            color = c.dim, fontSize = 13.sp, lineHeight = 18.sp, modifier = Modifier.padding(bottom = 4.dp),
-        )
+        // Only the play edition has a choice (its own face or the Dictionary); the direct edition is always the Dictionary.
         val faces = remember { Disguises.available(context).map { it to Disguises.label(context, it) } }
-        for ((d, name) in faces) {
-            val on = app.disguise == d
+        if (faces.size > 1) {
+            Spacer(Modifier.height(16.dp))
+            HorizontalDivider(color = c.dim.copy(alpha = 0.2f))
+            Label("Disguise", c)
             Text(
-                (if (on) "✓  " else "     ") + name,
-                color = if (on) c.accent else c.text,
-                fontSize = 16.sp,
-                fontWeight = if (on) FontWeight.Medium else FontWeight.Normal,
-                modifier = Modifier.fillMaxWidth().clickable { if (!on) pendingDisguise = d }.padding(vertical = 10.dp),
+                "How the app looks on your home screen. Only one shows at a time; the icon and name change right away.",
+                color = c.dim, fontSize = 13.sp, lineHeight = 18.sp, modifier = Modifier.padding(bottom = 4.dp),
             )
+            for ((d, name) in faces) {
+                val on = app.disguise == d
+                Text(
+                    (if (on) "✓  " else "     ") + name,
+                    color = if (on) c.accent else c.text,
+                    fontSize = 16.sp,
+                    fontWeight = if (on) FontWeight.Medium else FontWeight.Normal,
+                    modifier = Modifier.fillMaxWidth().clickable { if (!on) pendingDisguise = d }.padding(vertical = 10.dp),
+                )
+            }
         }
         Spacer(Modifier.height(16.dp))
         HorizontalDivider(color = c.dim.copy(alpha = 0.2f))
@@ -760,10 +763,6 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
                 val reminder = when (d) {
                     Disguise.READER -> "entry_reader"
                     Disguise.DICTIONARY -> "entry_dictionary"
-                    Disguise.NOTES -> "entry_notes"
-                    Disguise.CLOCK -> "entry_clock"
-                    Disguise.SUDOKU -> "entry_sudoku"
-                    else -> "entry_calc"
                 }
                 Text(state.meta.ui(reminder) + "\n\nThe icon and name change now, and the app returns to the home screen.")
             },

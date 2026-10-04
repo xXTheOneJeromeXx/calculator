@@ -222,7 +222,7 @@ fun DictionaryScreen(app: AppController) {
         Box(Modifier.weight(1f)) {
             val shown = entry
             when {
-                tab == RefTab.NOTES -> NotesScreen(app, hiddenEntry = false)
+                tab == RefTab.NOTES -> NotesScreen()
                 shown != null && tab == RefTab.THESAURUS -> ThesaurusView(shown, c, onWord = ::open)
                 shown != null -> EntryView(shown, c, onWord = ::open)
                 notFound != null -> NotFound(notFound!!, suggestions, c, onWord = ::open)

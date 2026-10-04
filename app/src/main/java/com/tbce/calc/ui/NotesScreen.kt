@@ -10,7 +10,6 @@ import android.widget.EditText
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,7 +44,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.tbce.calc.AppController
 import com.tbce.calc.notes.NotesStore
 
 private class NoteColors(val bg: Color, val bar: Color, val card: Color, val text: Color, val dim: Color, val accent: Color)
@@ -55,14 +53,9 @@ private fun noteColors(dark: Boolean) = if (dark)
 else
     NoteColors(Color(0xFFFBFAF6), Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFF1C1B18), Color(0xFF8A8780), Color(0xFFBE8E1C))
 
-/**
- * The Notes disguise: a plain, working notepad. Behind it is the same reader and code. To open the
- * reader, start a new note, hold Done to arm (the note clears), type the code, and hold Done again.
- * A normal tap of Done just saves the note. With [hiddenEntry] false (the Notes tab of the
- * reference disguise, whose way in is its Search button) holding Done does nothing.
- */
+/** The Dictionary's Notes tab: a plain, working notepad. It has no way into the reader. */
 @Composable
-fun NotesScreen(app: AppController, hiddenEntry: Boolean = true) {
+fun NotesScreen() {
     val context = LocalContext.current
     val store = remember { NotesStore(context) }
     val c = noteColors(isSystemInDarkTheme())
@@ -75,8 +68,6 @@ fun NotesScreen(app: AppController, hiddenEntry: Boolean = true) {
         NotesList(notes, c, onOpen = { editing = it }, onNew = { editing = NotesStore.Note(System.currentTimeMillis(), "", System.currentTimeMillis()) })
     } else {
         NoteEditor(
-            app = app,
-            hiddenEntry = hiddenEntry,
             note = current,
             c = c,
             onClose = { body ->
@@ -138,34 +129,21 @@ private fun NotesList(notes: List<NotesStore.Note>, c: NoteColors, onOpen: (Note
 }
 
 @Composable
-private fun NoteEditor(app: AppController, hiddenEntry: Boolean, note: NotesStore.Note, c: NoteColors, onClose: (String) -> Unit, onDelete: () -> Unit) {
+private fun NoteEditor(note: NotesStore.Note, c: NoteColors, onClose: (String) -> Unit, onDelete: () -> Unit) {
     var field by remember { mutableStateOf(note.body) }
-    var prevArmed by remember { mutableStateOf(app.armed) }
-    val editor = remember { arrayOfNulls<EditText>(1) }
 
-    // When the hidden gesture arms or disarms, the note area becomes the code buffer and is cleared,
-    // so a wrong code or a cancelled attempt leaves nothing behind.
-    if (app.armed != prevArmed) {
-        prevArmed = app.armed
-        field = ""
-        editor[0]?.setText("")
-    }
-
-    BackHandler { if (app.armed) app.faceDisarm() else onClose(field) }
+    BackHandler { onClose(field) }
 
     Column(Modifier.fillMaxSize().background(c.bg).safeDrawingPadding().imePadding()) {
         Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("‹", color = c.accent, fontSize = 30.sp, modifier = Modifier.clip(RoundedCornerShape(10.dp)).clickable { if (app.armed) app.faceDisarm() else onClose(field) }.padding(horizontal = 14.dp, vertical = 2.dp))
+            Text("‹", color = c.accent, fontSize = 30.sp, modifier = Modifier.clip(RoundedCornerShape(10.dp)).clickable { onClose(field) }.padding(horizontal = 14.dp, vertical = 2.dp))
             Spacer(Modifier.weight(1f))
             if (note.body.isNotEmpty()) {
                 Text("Delete", color = c.dim, fontSize = 16.sp, modifier = Modifier.clip(RoundedCornerShape(10.dp)).clickable { onDelete() }.padding(horizontal = 12.dp, vertical = 8.dp))
             }
-            // Tap saves the note; a long hold is the hidden gesture (arm, then submit).
-            HoldText(
-                label = "Done",
-                color = c.accent,
-                onClick = { onClose(field) },
-                onHold = { if (hiddenEntry) app.faceTrigger(field.filter { it.isDigit() }.toByteArray()) },
+            Text(
+                "Done", color = c.accent, fontSize = 16.sp, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.clip(RoundedCornerShape(10.dp)).clickable { onClose(field) }.padding(horizontal = 14.dp, vertical = 8.dp),
             )
         }
         AndroidView(
@@ -190,33 +168,13 @@ private fun NoteEditor(app: AppController, hiddenEntry: Boolean, note: NotesStor
                         override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, n: Int) {}
                         override fun onTextChanged(s: CharSequence?, a: Int, b: Int, n: Int) {}
                         override fun afterTextChanged(s: Editable?) {
-                            val t = s?.toString() ?: ""
-                            field = t
-                            // While armed the note holds only the code; a non-digit means "never mind".
-                            if (app.armed && t.any { !it.isDigit() }) app.faceDisarm()
+                            field = s?.toString() ?: ""
                         }
                     })
-                    editor[0] = this
                     post { requestFocus() }
                 }
             },
-            onRelease = { editor[0] = null },
         )
     }
 }
 
-/** Text that fires [onClick] on a tap and [onHold] on a long press (the hidden gesture). */
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-@Composable
-private fun HoldText(label: String, color: Color, onClick: () -> Unit, onHold: () -> Unit) {
-    Text(
-        label,
-        color = color,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold,
-        modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .combinedClickable(onClick = onClick, onLongClick = onHold)
-            .padding(horizontal = 14.dp, vertical = 8.dp),
-    )
-}

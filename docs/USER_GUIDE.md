@@ -1,15 +1,15 @@
 # User guide
 
 This app is a Bible reader (BSB, WEB and KJV) with highlights, notes and a Saved list,
-opened only with your code. It can look like an ordinary dictionary, calculator, notepad,
-clock or sudoku game instead. It works with no internet connection, ever.
+opened only with your code. It can look like an ordinary dictionary instead. It works with
+no internet connection, ever.
 
 ## Two versions
 
 - **Kanaiic Reader** (from Google Play) opens as itself: its own name and icon, and a plain
-  screen asking for your code. You can switch it to a disguise in Settings, but the app's
-  Play Store page describes the disguises, and anyone who looks at the app's details on the
-  phone can find that page. Its disguises hide the app from a glance, not from a search.
+  screen asking for your code. You can switch it to the dictionary disguise in Settings, but
+  the app's Play Store page describes the disguise, and anyone who looks at the app's details
+  on the phone can find that page. Its disguise hides the app from a glance, not from a search.
 - **The direct version** (downloaded from kanaiic.com or GitHub) is always disguised. It
   starts as a dictionary, and it is not on any app store, so its details lead nowhere. If
   being found with a Bible app could put you in danger, use this one.
@@ -43,24 +43,16 @@ made the app. If you forget it, everything inside is gone. Make a backup (see be
 
 Kanaiic Reader: type your code on the number pad and tap **Open**.
 
-In a disguise, the way in is hidden in an ordinary control. Each one follows the same
-pattern: hold the control for about two seconds (whatever was showing clears), type your
-code, then hold the same control again. A normal tap of the control does its usual job.
+As a dictionary, the way in is hidden in the **Search** button: hold it for about two seconds
+(the search box clears), type your code in the box, then hold **Search** again. A normal tap
+of Search just looks a word up.
 
-| Disguise | Hold | Type the code |
-| --- | --- | --- |
-| Dictionary | **Search** | in the search box |
-| Calculator | `=` (until the display shows 0) | on the keys; it shows like any number |
-| Notes | **Done**, in a new note | in the note |
-| Clock | **Start** (until the timer clears) | on the timer's number pad |
-| Sudoku | **Notes** | on the number pad (Erase is 0, Undo removes a digit) |
+If the code is wrong, nothing happens: the dictionary shows an empty search. If you type
+anything other than digits in between, or wait 15 seconds, it goes back to normal and you can
+start again.
 
-If the code is wrong, nothing happens: the dictionary shows an empty search, the calculator
-shows 0, and so on. If you do anything else in between, or wait 15 seconds, it goes back to
-normal and you can start again.
-
-The Dictionary disguise is a working dictionary and thesaurus with a Notes tab. Only its
-Search button opens the reader; holding Done in its Notes tab does nothing special.
+The dictionary is a working dictionary and thesaurus with a Notes tab. Only its Search button
+opens the reader; the Notes tab is an ordinary notepad.
 
 It closes itself and shows the front screen again:
 
@@ -79,6 +71,9 @@ Screenshots, screen recording and the app-switcher preview are blocked while it 
 - Tap BSB (top right) to switch translation. You stay on the same passage.
 - Search: type a reference like `John 3:16` or `1 cor 13:4-7` to go there, or words to
   search the current translation.
+- Original words: select verses and tap **Original** to see the Hebrew or Greek word behind
+  each King James word, with its Strong's number. Tap one for its meaning and every verse
+  that uses it. You can also type a number like `H430` or `G26` in Search.
 - Settings: theme (Paper, Sepia, Dark, Black), text size and line spacing.
 
 ## Highlights, notes and Saved
@@ -96,14 +91,15 @@ Highlights and notes belong to the verse, so they show in every translation.
 
 ## Changing how it looks
 
-Inside, under Settings > Disguise, you can choose how the app appears on your home screen:
-a dictionary, calculator, notepad, clock or sudoku game (and, on Kanaiic Reader, as itself).
-Only one shows at a time; the icon and name change straight away,
-and the app returns to the home screen. The reader, your code and everything inside stay the
-same. Each disguise has its own way to open the reader, and the screen reminds you when you
-switch. If several people might see your phone, a disguise that is common where you live
-draws less attention than one that is not. The app is fairly large because of the Bible text
-and the dictionary; a dictionary explains that size better than a calculator does.
+The direct version is always the dictionary. On Kanaiic Reader, Settings > Disguise switches
+between the app's own name and icon and the dictionary; the icon and name change straight
+away, and the app returns to the home screen. The reader, your code and everything inside stay
+the same, and the screen reminds you of the way in when you switch.
+
+Earlier versions also offered a calculator, notepad, clock and sudoku game. They were removed
+in version 1.5: a disguise someone knows about is easy to recognise, so each extra one was a
+weak point. If your phone used one of them, the update turns it into the dictionary. Your code
+and everything inside stay the same; open it by holding **Search** as described above.
 
 ## Backups
 

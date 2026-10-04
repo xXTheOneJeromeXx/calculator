@@ -24,19 +24,19 @@ the original design brief (sections 2, 4, 5, 6 and 9).
 - Two editions (build flavors). **direct** (`com.tbce.calc`, GitHub / kanaiic.com) starts as
   a working reference app (WordNet 3.0 dictionary and thesaurus, plus a notepad tab) and has
   no undisguised face; **play** (`com.kanaiic.reader`) starts as "Kanaiic Reader" with a plain
-  code pad, and offers the same disguises. The play-only face, label and icon live in
+  code pad, and offers the Dictionary as its one disguise. The play-only face, label and icon live in
   `src/play/`, so the direct APK never contains the name; `scan_apk.sh` checks that.
-- Disguises: Dictionary (direct default), Calculator (complete: BigDecimal, precedence,
-  percent, repeated `=`, scientific landscape), Notes, Clock, Sudoku. Installs updated from
-  before 1.3 that had a vault stay on Calculator (`UpdateReceiver` on MY_PACKAGE_REPLACED,
-  plus the same check on first launch).
-- Hidden gesture (brief section 4), shown for the calculator; the other disguises follow the
-  same arm / type / submit pattern on one control (Dictionary: hold Search, type in the search
-  box, hold Search; the box clears on arm and disarm, and lookups store only headwords that
-  were opened). Calculator: hold `=` 1.5 s to arm (display resets to 0), digits feed
-  both the calculator and a hidden buffer, hold `=` again to submit. Any operator, `.`, short
-  `=`, 15 s, or backgrounding silently disarms. No haptics, sound or visual difference.
-  `UnlockController` + `UnlockControllerTest` cover every transition.
+- One disguise: the Dictionary. Calculator, Notes, Clock and Sudoku (1.0–1.4) were removed in
+  1.5: each extra face was another known pattern a searcher could
+  recognise, and its leftovers (a saved Sudoku game, the face preference) were evidence of
+  switching. An install on a removed face moves to the default face on update
+  (`UpdateReceiver` on MY_PACKAGE_REPLACED, plus the same check on launch), which re-enables
+  the default alias and deletes the Sudoku save.
+- Hidden gesture (brief section 4, adapted from the calculator's `=` to the Dictionary's
+  Search button): hold Search to arm (the box clears), type the code in the box, hold Search
+  again to submit. Typing a non-digit, 15 s, or backgrounding silently disarms; the box clears
+  on arm and disarm, and lookups store only headwords that were opened. No haptics, sound or
+  visual difference beyond the cleared box.
 - No permissions (no INTERNET), `allowBackup=false`, empty data-extraction rules, only the
   launcher activity exported (the androidx profile-installer receiver and the
   DYNAMIC_RECEIVER permission are removed in the manifest).
@@ -110,26 +110,25 @@ c0         = version | salt | m | t | p | GCM_KEK_device( GCM_KEK_code( DEK ) )
 4. **StrongBox fallback untested** on a phone without StrongBox (emulator only).
 5. **Strings in memory.** Note text, search queries and passphrases pass through Java
    `String`s (EditText) that cannot be zeroed; they live until garbage collection. So does
-   the code itself when it is typed in the Notes or Dictionary disguise's text box.
+   the code itself when it is typed in the Dictionary's search box.
 6. **Online guessing.** With the device in hand, codes can be tried through the app at
    about 1–2 s each. A 6-digit code falls in days; 8+ digits and the opt-in wipe help.
 7. **Picker grace window.** The vault stays unlocked up to 120 s behind the system picker.
 8. **Updater tell.** An updater such as Obtainium shows where the app came from.
 9. **Single annotation document.** All notes are one encrypted item rewritten on every
    change; fine now, slow for very large note collections.
-10. **Disguises.** The app ships several launcher faces (dictionary, calculator, notes, clock,
-    sudoku; plus the reader's own face on play) as
-    activity-aliases; the enabled one, the chosen-disguise preference, and the notepad's own
-    (non-secret) notes are all visible to the system and in a storage image. The set of
-    faces is also listed in the APK manifest. This reveals that the app can change its
-    appearance, though not what it hides. Switching faces briefly sends the app to the home
+10. **Disguise.** The launcher face is an activity-alias (direct: Dictionary only; play: its
+    own face and the Dictionary). The enabled alias, the face preference and the notepad's
+    own (non-secret) notes are visible to the system and in a storage image. On direct the
+    manifest has one launcher alias pointing at a non-launcher activity, which an examiner
+    may still find unusual. Switching faces (play only) briefly sends the app to the home
     screen. The application label in system settings is fixed per edition ("Dictionary" on
     direct, "Kanaiic Reader" on play) whichever face is chosen.
 11. **Forensic self-test not done.** Brief section 12 asks for a full-storage image after use
     to confirm nothing readable remains (including keyboard dictionaries).
 12. **Play edition is traceable.** Its package id leads to a public listing that describes
-    the disguises, and Play keeps an install record in the user's Google account. Its
-    disguises only hide the app from a glance. The user guide says so and points people at
+    the disguise, and Play keeps an install record in the user's Google account. Its
+    disguise only hides the app from a glance. The user guide says so and points people at
     risk to the direct edition, whose id appears on no store.
 
 ## Suggested review scope

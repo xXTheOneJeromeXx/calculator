@@ -189,8 +189,8 @@ fun CodeEntry(
     }
 }
 
-/** Pack key for how to open the reader from [face], e.g. "code_how_notes"; calculator is "code_how". */
-fun howKey(face: Disguise) = if (face == Disguise.CALCULATOR) "code_how" else "code_how_" + face.name.lowercase()
+/** Pack key for how to open the reader from [face], e.g. "code_how_dictionary". */
+fun howKey(face: Disguise) = "code_how_" + face.name.lowercase()
 
 @Composable
 private fun Hint(text: String, colors: CodeColors, strong: Boolean = false) {

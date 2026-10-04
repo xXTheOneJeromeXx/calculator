@@ -11,10 +11,12 @@ class DisguiseTest {
         assertEquals("aliases must be unique", aliases.size, aliases.toSet().size)
         assertEquals("labels must be unique", labels.size, labels.toSet().size)
         assertTrue(aliases.all { it.startsWith("Face") && it.isNotBlank() })
-        assertTrue(
-            listOf(Disguise.READER, Disguise.DICTIONARY, Disguise.CALCULATOR, Disguise.NOTES, Disguise.CLOCK, Disguise.SUDOKU)
-                .all { it in Disguise.entries },
-        )
+    }
+
+    @Test fun onlyTheReaderAndDictionaryRemain() {
+        // Calculator, Notes, Clock and Sudoku were removed in 1.5: each extra face was one more
+        // thing a searched phone could give away.
+        assertEquals(listOf(Disguise.READER, Disguise.DICTIONARY), Disguise.entries.toList())
     }
 
     @Test fun defaultsComeFirst() {

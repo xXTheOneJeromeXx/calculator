@@ -27,15 +27,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.tbce.calc.Config
 
 enum class KeyStyle { NUMBER, FUNCTION, OPERATOR, EQUALS }
 
-/**
- * A keypad key. Fires [onClick] on release. If [onHold] is set, holding for [Config.HOLD_MS]
- * fires it instead, while the finger is still down, and the release then does nothing.
- * Holding any key looks the same, so a hold on '=' shows nothing different.
- */
+/** A keypad key (the code pads). Fires [onClick] on release; sliding off cancels. */
 @Composable
 fun Key(
     label: String,
@@ -43,13 +38,11 @@ fun Key(
     fontSize: TextUnit,
     modifier: Modifier = Modifier,
     description: String = label,
-    onHold: (() -> Unit)? = null,
     onClick: () -> Unit,
 ) {
     val colors = LocalCalcColors.current
     var pressed by remember { mutableStateOf(false) }
     val click by rememberUpdatedState(onClick)
-    val hold by rememberUpdatedState(onHold)
     val (bg, fg) = when (style) {
         KeyStyle.NUMBER -> colors.number to colors.onNumber
         KeyStyle.FUNCTION -> colors.function to colors.onFunction
@@ -69,23 +62,8 @@ fun Key(
                 awaitEachGesture {
                     awaitFirstDown()
                     pressed = true
-                    // 0 = held long enough, 1 = released, 2 = cancelled (finger slid away, etc.)
-                    var outcome = 0
-                    val h = hold
-                    if (h == null) {
-                        outcome = if (waitForUpOrCancellation() != null) 1 else 2
-                    } else {
-                        withTimeoutOrNull(Config.HOLD_MS) {
-                            outcome = if (waitForUpOrCancellation() != null) 1 else 2
-                        }
-                    }
-                    when (outcome) {
-                        1 -> click()
-                        0 -> {
-                            h?.invoke()
-                            waitForUpOrCancellation()
-                        }
-                    }
+                    // Null when cancelled (finger slid away, etc.).
+                    if (waitForUpOrCancellation() != null) click()
                     pressed = false
                 }
             },

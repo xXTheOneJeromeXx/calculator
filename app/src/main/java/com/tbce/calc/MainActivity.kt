@@ -13,10 +13,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.tbce.calc.ui.AppTheme
-import com.tbce.calc.ui.CalculatorScreen
-import com.tbce.calc.ui.NotesScreen
-import com.tbce.calc.ui.TimerScreen
-import com.tbce.calc.ui.SudokuScreen
 import com.tbce.calc.ui.DictionaryScreen
 import com.tbce.calc.ui.ReaderLockScreen
 import com.tbce.calc.ui.SetupScreen
@@ -46,15 +42,11 @@ class MainActivity : ComponentActivity() {
         app.initDisguise(Disguises.current(this))
         setContent {
             AppTheme {
-                LaunchedEffect(app.screen) { setSecure(app.screen != Screen.CALC) }
+                LaunchedEffect(app.screen) { setSecure(app.screen != Screen.FRONT) }
                 when (app.screen) {
-                    Screen.CALC -> when (app.disguise) {
+                    Screen.FRONT -> when (app.disguise) {
                         Disguise.READER -> ReaderLockScreen(app)
                         Disguise.DICTIONARY -> DictionaryScreen(app)
-                        Disguise.CALCULATOR -> CalculatorScreen(app)
-                        Disguise.NOTES -> NotesScreen(app)
-                        Disguise.CLOCK -> TimerScreen(app)
-                        Disguise.SUDOKU -> SudokuScreen(app)
                     }
                     Screen.SETUP -> SetupScreen(app)
                     Screen.INSIDE -> ReaderScreen(app)
@@ -84,7 +76,7 @@ class MainActivity : ComponentActivity() {
         if (app.pickerOpen) handler.postDelayed(graceLock, Config.PICKER_GRACE_MS) else app.onBackground()
     }
 
-    /** Blocks screenshots, screen recording and the recents thumbnail outside the calculator. */
+    /** Blocks screenshots, screen recording and the recents thumbnail outside the front screen. */
     private fun setSecure(on: Boolean) {
         // Debug builds skip the flag so the screens can be checked with screenshots; release never does.
         val debuggable = (applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0

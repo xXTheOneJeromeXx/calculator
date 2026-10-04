@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Play edition: the app's own name, and an undisguised face that is enabled by default.
-     The disguises from the main manifest stay available, all off until chosen in Settings. -->
+     The Dictionary disguise from the main manifest stays available, off until chosen in Settings. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 

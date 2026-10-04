@@ -3,7 +3,6 @@ package com.tbce.calc
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import com.tbce.calc.vault.KeyVault
 
 /**
  * A launcher face: the icon and name the app shows, and the front screen behind it. READER is the
@@ -14,10 +13,6 @@ import com.tbce.calc.vault.KeyVault
 enum class Disguise(val label: String, val alias: String) {
     READER("Reader", "FaceReader"),
     DICTIONARY("Dictionary", "FaceDictionary"),
-    CALCULATOR("Calculator", "FaceCalculator"),
-    NOTES("Notes", "FaceNotes"),
-    CLOCK("Clock", "FaceClock"),
-    SUDOKU("Sudoku", "FaceSudoku"),
 }
 
 /**
@@ -58,18 +53,25 @@ object Disguises {
 
     /**
      * The active face. The choice is stored the first time it is read, so this always matches the
-     * enabled alias. Installs from before 1.3 stored nothing while on Calculator (then the
-     * default); if one was set up, it is pinned to Calculator rather than moved to the new default.
+     * enabled alias. An install whose face no longer exists (Calculator, Notes, Clock and Sudoku
+     * were removed in 1.5, and before 1.3 nothing was stored while on Calculator) moves to the
+     * default face. Its alias is enabled explicitly, because switching away from it earlier
+     * disabled it, and that setting outlives the update.
      */
     fun current(context: Context): Disguise {
         val faces = available(context)
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val name = prefs.getString(KEY, null)
         faces.firstOrNull { it.name == name }?.let { return it }
-        val legacy = name == null && Disguise.CALCULATOR in faces && KeyVault.existsIn(context.filesDir)
-        val face = if (legacy) Disguise.CALCULATOR else faces.firstOrNull() ?: Disguise.CALCULATOR
-        if (legacy) set(context, face) else prefs.edit().putString(KEY, face.name).apply()
+        val face = faces.firstOrNull() ?: Disguise.DICTIONARY
+        set(context, face)
+        if (name != null) forgetRemovedFaces(context)
         return face
+    }
+
+    /** Deletes what the faces removed in 1.5 left behind (Sudoku's saved game), so it can't hint they were used. */
+    private fun forgetRemovedFaces(context: Context) {
+        context.deleteSharedPreferences("s")
     }
 
     fun set(context: Context, disguise: Disguise) {
@@ -84,8 +86,8 @@ object Disguises {
 }
 
 /**
- * Runs once after the app is updated, before it is next opened, so an install updated from 1.2
- * keeps its Calculator icon instead of showing the new default face until first launch.
+ * Runs once after the app is updated, before it is next opened, so an install whose face was
+ * removed gets the default face's icon straight away instead of no icon until first launch.
  */
 class UpdateReceiver : android.content.BroadcastReceiver() {
     override fun onReceive(context: Context, intent: android.content.Intent) {

@@ -1,7 +1,4 @@
 <resources>
     <color name="icon_bg">#FF2F5F8F</color>
-    <color name="icon_bg_notes">#FFE6A817</color>
-    <color name="icon_bg_clock">#FF2C8C6E</color>
-    <color name="icon_bg_sudoku">#FF5B57B0</color>
     <color name="icon_bg_dictionary">#FF3D5A80</color>
 </resources>

@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.5.0 (2026-10-04): the dictionary is the only disguise
+
+- The calculator, notepad, clock and sudoku disguises are gone. Every disguise someone has
+  learned about is one they can recognise on a searched phone, so offering several made the
+  app easier to find, not harder. The direct version is always the dictionary; Kanaiic Reader
+  shows as itself or as the dictionary.
+- Phones on one of the removed disguises become the dictionary when they update, before the
+  app is even opened. Your code, notes, highlights and saved verses stay. To open the reader:
+  hold Search until the box clears, type your code, hold Search again. The saved sudoku game
+  is deleted so it doesn't show the disguise was used.
+- The dictionary's Notes tab is an ordinary notepad (it never opened the reader).
+- Settings no longer shows a Disguise section on the direct version.
+- The user guide also covers Strong's numbers now.
+
 ## 1.4.0 (2026-10-04): Strong's numbers
 
 - Select one or more verses and tap **Original**: each word the King James Version tags with a

@@ -78,10 +78,6 @@ UI = {
     # Setup and code screens: kept out of the APK so they don't describe the hidden gesture.
     "code_new": "Choose a code", "code_again": "Enter the code again", "code_change": "Choose a new code",
     "code_min": "Use at least {min} digits. {good} or more is better.",
-    "code_how": "To open later: hold = until the display shows 0, type your code, then hold = again.",
-    "code_how_notes": "To open later: start a note, hold Done, type your code, then hold Done again.",
-    "code_how_clock": "To open later: hold Start until the timer clears, type your code on the pad, then hold Start again.",
-    "code_how_sudoku": "To open later: hold Notes, type your code on the number pad, then hold Notes again.",
     "code_how_dictionary": "To open later: hold Search until the box clears, type your code in the box, then hold Search again.",
     "code_how_reader": "You'll type this code each time you open the app.",
     "code_lost": "A forgotten code can't be recovered, and nothing inside can be opened without it.",
@@ -89,16 +85,12 @@ UI = {
     "code_mismatch": "Those didn't match. Start again.",
     "code_weak": "Easy to guess", "code_short": "Too short", "code_ok": "OK. Longer is better.", "code_good": "Good length",
     # Disguise reminders: name the hidden gesture, so they live in the pack, not the APK.
-    "entry_calc": "The app now looks like a calculator. To open the reader: hold =, type your code, then hold = again.",
-    "entry_notes": "The app now looks like Notes. To open the reader: tap + to start a note, hold Done, type your code, then hold Done again. A normal tap of Done just saves a note.",
-    "entry_clock": "The app now looks like a Clock. To open the reader: hold Start until the timer clears, type your code on the pad, then hold Start again. A normal tap of Start just runs a countdown.",
     "entry_dictionary": "The app now looks like a Dictionary, with Thesaurus and Notes tabs. To open the reader: hold Search until the box clears, type your code in the box, then hold Search again. A normal tap of Search just looks a word up.",
     "entry_reader": "The app now shows its own name and icon, and opens with your code on a plain number pad. Anyone who sees the phone can tell what it is.",
     # The play edition's undisguised front screen.
     "reader_welcome": "Bible texts and your notes stay on this phone, locked with a code you choose.",
     "reader_start": "Choose a code", "reader_enter": "Enter your code", "reader_wrong": "That code didn't work. Try again.",
     "reader_open": "Open",
-    "entry_sudoku": "The app now looks like Sudoku. To open the reader: hold Notes, then type your code on the number pad (Erase is 0, Undo removes a digit), then hold Notes again. The board goes back to how it was afterwards. A normal tap of Notes just turns pencil marks on or off.",
 }
 
 PARA = {
