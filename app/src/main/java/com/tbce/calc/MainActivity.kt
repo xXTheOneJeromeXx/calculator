@@ -15,6 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import com.tbce.calc.ui.AppTheme
 import com.tbce.calc.ui.CalculatorScreen
 import com.tbce.calc.ui.NotesScreen
+import com.tbce.calc.ui.TimerScreen
+import com.tbce.calc.ui.SudokuScreen
 import com.tbce.calc.ui.SetupScreen
 import com.tbce.calc.ui.ReaderScreen
 import com.tbce.calc.reader.Packs
@@ -47,6 +49,8 @@ class MainActivity : ComponentActivity() {
                     Screen.CALC -> when (app.disguise) {
                         Disguise.CALCULATOR -> CalculatorScreen(app)
                         Disguise.NOTES -> NotesScreen(app)
+                        Disguise.CLOCK -> TimerScreen(app)
+                        Disguise.SUDOKU -> SudokuScreen(app)
                     }
                     Screen.SETUP -> SetupScreen(app)
                     Screen.INSIDE -> ReaderScreen(app)

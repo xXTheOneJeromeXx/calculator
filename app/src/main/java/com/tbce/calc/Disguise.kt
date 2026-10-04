@@ -8,6 +8,8 @@ import android.content.pm.PackageManager
 enum class Disguise(val label: String, val alias: String) {
     CALCULATOR("Calculator", "FaceCalculator"),
     NOTES("Notes", "FaceNotes"),
+    CLOCK("Clock", "FaceClock"),
+    SUDOKU("Sudoku", "FaceSudoku"),
 }
 
 /**

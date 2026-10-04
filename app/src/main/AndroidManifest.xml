@@ -59,6 +59,34 @@
             </intent-filter>
         </activity-alias>
 
+        <activity-alias
+            android:name=".FaceClock"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:enabled="false"
+            android:icon="@drawable/ic_clock"
+            android:roundIcon="@drawable/ic_clock"
+            android:label="@string/label_clock">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".FaceSudoku"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:enabled="false"
+            android:icon="@drawable/ic_sudoku"
+            android:roundIcon="@drawable/ic_sudoku"
+            android:label="@string/label_sudoku">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <!-- Exported by a library; not needed, and nothing but the launcher should be exported. -->
         <receiver
             android:name="androidx.profileinstaller.ProfileInstallReceiver"

@@ -2,4 +2,6 @@
     <string name="app_name">Calculator</string>
     <string name="label_calculator">Calculator</string>
     <string name="label_notes">Notes</string>
+    <string name="label_clock">Clock</string>
+    <string name="label_sudoku">Sudoku</string>
 </resources>

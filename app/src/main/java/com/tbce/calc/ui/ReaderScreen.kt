@@ -750,7 +750,15 @@ private fun SettingsPane(app: AppController, state: ReaderState, c: ReaderColors
         AlertDialog(
             onDismissRequest = { pendingDisguise = null },
             title = { Text("Look like ${d.label}?") },
-            text = { Text(state.meta.ui(if (d == Disguise.NOTES) "entry_notes" else "entry_calc") + "\n\nThe icon and name change now, and the app returns to the home screen.") },
+            text = {
+                val reminder = when (d) {
+                    Disguise.NOTES -> "entry_notes"
+                    Disguise.CLOCK -> "entry_clock"
+                    Disguise.SUDOKU -> "entry_sudoku"
+                    else -> "entry_calc"
+                }
+                Text(state.meta.ui(reminder) + "\n\nThe icon and name change now, and the app returns to the home screen.")
+            },
             confirmButton = { TextButton(onClick = { pendingDisguise = null; app.setDisguise(context, d) }) { Text("Switch") } },
             dismissButton = { TextButton(onClick = { pendingDisguise = null }) { Text("Cancel") } },
         )

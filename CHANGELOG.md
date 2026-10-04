@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.2.0 (2026-10-04): more disguises — Clock and Sudoku
+
+- Two more faces in Settings > Disguise, both opening the same reader:
+  - **Clock**: a working wall clock and countdown timer. To open the reader, hold Start
+    until the timer clears, type your code on the pad, then hold Start again. A normal tap
+    of Start just runs a countdown.
+  - **Sudoku**: a full game — new puzzles generated on the phone at Easy, Medium or Hard
+    (always exactly one solution), pencil marks, undo, erase, hints, a timer, row/column/box
+    and same-digit highlighting, conflict marking, a "Solved" screen, and the game is saved
+    and resumed automatically. The entry is played on the board: hold Notes to arm, type the
+    code on the number pad (Erase is 0, Undo removes a digit), hold Notes again. The presses
+    look like ordinary moves; when the gesture ends the board goes back to how it was, and
+    nothing is saved while armed, so the code never reaches the saved game.
+- Both faces use `combinedClickable` long-press for the hidden gesture (the 1.1 pointerInput
+  hold was unreliable from injected input).
+- Disguise reminders for the two faces ship in the encrypted pack, not the APK. The scan
+  still finds no telltale words, no permissions, backups off, and exactly one exported
+  launcher per face (now four).
+
 ## 1.1.0 (2026-10-04): switchable disguises
 
 - Settings > Disguise: choose how the app looks on the home screen — a calculator or a
