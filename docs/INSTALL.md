@@ -49,9 +49,9 @@ New versions are installed the same way, over the top. Your code and notes stay.
 
 - **"App not installed"**: there is not enough space, or a different app named Calculator
   from another source is in the way. Free some space and try again.
-- **"Install blocked" with no Install anyway button, or a message about unverified
-  developers**: your phone is in a country where Android now requires extra steps. Ask the
-  person who gave you the link.
+- **"Install blocked" with no Install anyway button**: ask the person who gave you the link.
+  (The app is registered with Android developer verification, so no extra developer
+  settings or waiting period should be needed.)
 - **Nothing happens when you tap the file**: open it from the Files app instead of from the
   browser.
 
