@@ -31,6 +31,25 @@ before relying on it.
   and follow [docs/INSTALL.md](docs/INSTALL.md).
 - **Use:** [docs/USER_GUIDE.md](docs/USER_GUIDE.md) (also inside the app, under Settings).
 - **Design and known weaknesses:** [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md).
+- **What changed in each version:** [CHANGELOG.md](CHANGELOG.md).
+
+## What's where
+
+| Path | What it is |
+| --- | --- |
+| `app/src/main/java/com/tbce/calc/` | The app (the package name is historical; it can't change without breaking updates). |
+| &nbsp;&nbsp;`vault/` | Encryption: the code, keys, the encrypted store, backups. |
+| &nbsp;&nbsp;`reader/` | The reader's data: packs, books, annotations, search, Strong's. |
+| &nbsp;&nbsp;`dictionary/`, `notes/` | The dictionary disguise's word lookup and its notepad. |
+| &nbsp;&nbsp;`ui/` | Every screen: reader, Strong's, lock and setup, dictionary, notes, PDF. |
+| &nbsp;&nbsp;`AppController.kt`, `Disguise.kt` | Locking and unlocking; the launcher faces. |
+| `app/src/test/` | Unit tests (they read the real packs). |
+| `app/src/main/assets/r/` | Encrypted packs: scripture, Strong's, book names, reader wording, the guide. |
+| `app/src/main/assets/w/` | Dictionary word data (WordNet 3.0, plain). |
+| `content/sources/` | Sources the packs and dictionary are built from. |
+| `tools/` | `build_packs.py`, `build_dict.py`, and `scan_apk.sh` (release check). |
+| `docs/` | Install guide, user guide (also in the app), threat model, test script. |
+| `licenses/` | Notices for the texts, font, WordNet and Strong's. |
 
 ## Building
 
@@ -43,9 +62,9 @@ JDK 21 and the Android SDK (platform 37.2). Then:
 tools/scan_apk.sh app/build/outputs/apk/direct/release/app-direct-release.apk
 ```
 
-`scan_apk.sh` checks for telltale words, permissions, backups and exported components; the
-direct version must not contain the Play version's name. The play-only face, name and icon
-live in `app/src/play/`.
+`scan_apk.sh` checks for telltale words, permissions, backups and exported components. The two
+versions (build flavors `direct` and `play`) behave identically; only the application id
+differs. Manual checks before a release are in [docs/TEST_SCRIPT.md](docs/TEST_SCRIPT.md).
 
 Scripture, book names and some wording ship as encrypted packs in `app/src/main/assets/r/`,
 built from `content/sources/` by `python3 tools/build_packs.py` (needs `cryptography`). The
@@ -59,6 +78,6 @@ Builds signed with any other key cannot update an installed copy.
 
 ## License
 
-Code: GPLv3 ([LICENSE](LICENSE)). Texts: BSB, WEB and KJV are public domain; Literata is
-under the SIL Open Font License; WordNet 3.0 is © Princeton University under the WordNet
-licence. Notices in [licenses/](licenses/).
+Code: GPLv3 ([LICENSE](LICENSE)). Texts: BSB, WEB and KJV are public domain, and so are
+Strong's Hebrew and Greek dictionaries (1890); Literata is under the SIL Open Font License;
+WordNet 3.0 is © Princeton University under the WordNet licence. Notices in [licenses/](licenses/).
