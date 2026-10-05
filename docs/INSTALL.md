@@ -3,9 +3,10 @@
 This takes about two minutes. You only do it once; you do not need a Google account,
 internet after installing, or any other app.
 
-This is the version that is not on any app store. It works the same as the Play Store
-version: it installs as **Kanaiic Reader**, and you can make it look like a dictionary in its
-settings. (The Play Store version installs like any other app.)
+This is the version that is not on any app store. It installs as a dictionary called
+**Dictionary**, and the phone's app settings call it that too. When you first open it, a
+message explains how to set your code and how to get in. (The Play Store version installs
+like any other app.)
 
 ## 1. Download
 
@@ -33,8 +34,9 @@ settings. (The Play Store version installs like any other app.)
 9. If **Google Play Protect** shows a warning, tap **More details** (or the small arrow),
    then **Install anyway**. If it offers to **scan** the app, you can let it; then install.
 10. Tap **Open** or **Done**. The app is now on your home screen or in your app list as
-    **Kanaiic Reader**. Open it, choose your code, and if you want it to look like a
-    dictionary, go to **Settings > Disguise > Dictionary** (see the user guide).
+    **Dictionary**. Open it and follow the message: tap **Set up now** (or hold the blue
+    **Search** button for two seconds) and choose your code. To get in later: hold Search until
+    the box clears, type your code, hold Search again. The steps are also in the app's Settings.
 
 ## 5. Tidy up (important)
 

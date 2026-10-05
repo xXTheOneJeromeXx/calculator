@@ -6,21 +6,20 @@ Strong's numbers (search the Hebrew and Greek lexicon, or see the words behind a
 highlights, notes, a Saved list and passphrase-locked backups. It has no internet permission
 and stores everything encrypted, tied to your code and to the phone.
 
-It comes in two versions built from this code, which work the same way: each opens as
-**Kanaiic Reader** with a plain code screen, offers right after setup to disguise itself, and
-in Settings can be made to look like a working offline dictionary and thesaurus with notes
-and PDF tabs (to open the reader from it: hold **Search**, type the code, hold **Search**
-again). They differ only in where they come from:
+It comes in two versions built from this code, with the same features: each can look like
+**Kanaiic Reader** (a plain code screen) or like a working offline dictionary and thesaurus
+with notes and PDF tabs (to open the reader from it: hold **Search**, type the code, hold
+**Search** again), switchable in Settings.
 
-- **Google Play** (`com.kanaiic.reader`). Its store page describes the disguise, so the
-  disguise only hides the app from a glance.
-- **Direct** (`com.tbce.calc`, `dictionary.apk` from Releases). It is not on any store, so its
-  package id leads nowhere.
+- **Direct** (`com.tbce.calc`, `dictionary.apk` from Releases) starts already disguised as the
+  dictionary, with a message explaining setup until a code is set, and shows as "Dictionary"
+  in the phone's app settings. It is not on any store, so its package id leads nowhere.
+- **Google Play** (`com.kanaiic.reader`) starts as Kanaiic Reader, offers the disguise after
+  setup, and shows as "Kanaiic Reader" in the phone's app settings. Its store page describes
+  the disguise, so the disguise only hides it from a glance.
 
-On both, the phone's app settings list it as "Kanaiic Reader" even while it looks like a
-dictionary. Up to 1.5 the direct version was always the dictionary, and up to 1.4 there were
-also calculator, notepad, clock and sudoku disguises; those were removed because every extra
-disguise is one more pattern a searcher can learn to recognise.
+Up to 1.4 there were also calculator, notepad, clock and sudoku disguises; those were removed
+because every extra disguise is one more pattern a searcher can learn to recognise.
 
 It raises the cost of casual and fairly thorough phone inspections. It does not stop
 someone who watches you type the code, forces you to open it, or takes the app apart with

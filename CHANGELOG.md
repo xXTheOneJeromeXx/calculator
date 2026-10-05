@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.8.0 (2026-10-04): the direct version starts as the dictionary
+
+- A new install of the version from kanaiic.com and GitHub starts **disguised as
+  the dictionary**. The first time it opens (and each time until you set a code) a message
+  explains how to set your code and how to get in, with a **Set up now** button.
+- That version now shows as **Dictionary**, with the dictionary icon, in the phone's app
+  settings, the installer and other system screens. The Google Play version still starts as
+  Kanaiic Reader and shows that name there, matching its store listing.
+- The dictionary's **Search** button is now a proper filled button, so it's clearer that it
+  can be pressed and held.
+- Phones already set up keep whatever look they have now.
+
 ## 1.7.0 (2026-10-04): PDF viewer, disguise offer, Strong's tab
 
 - The dictionary disguise gains a **PDF** tab next to Dictionary, Thesaurus and Notes. Tap

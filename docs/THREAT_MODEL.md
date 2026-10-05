@@ -21,11 +21,14 @@ the original design brief (sections 2, 4, 5, 6 and 9).
 
 ### Disguise
 
-- Two editions (build flavors) that behave identically since 1.6: **direct**
-  (`com.tbce.calc`, GitHub / kanaiic.com) and **play** (`com.kanaiic.reader`). Both start as "Kanaiic Reader" with a plain code pad and offer the
-  Dictionary (a working WordNet 3.0 dictionary and thesaurus, plus a notepad tab) as the one
-  disguise. Only the application id differs. Until 1.5 the direct edition started as the
-  Dictionary, had no undisguised face and never contained the name "Kanaiic"; it now does.
+- Two editions (build flavors) with the same features since 1.6: **direct** (`com.tbce.calc`,
+  GitHub / kanaiic.com) and **play** (`com.kanaiic.reader`). Both have the app's own face
+  ("Kanaiic Reader", plain code pad) and the Dictionary (a working WordNet 3.0 dictionary and
+  thesaurus, plus notes and PDF tabs). They differ in application id, in the application
+  label and icon (Dictionary on direct, Kanaiic Reader on Play), and in the starting face:
+  direct starts as the Dictionary (with a welcome message on the front screen until a code is
+  set), Play starts as itself and offers the Dictionary after setup. Both APKs contain the
+  name "Kanaiic" since 1.6.
 - One disguise: the Dictionary. Calculator, Notes, Clock and Sudoku (1.0–1.4) were removed in
   1.5: each extra face was another known pattern a searcher could
   recognise, and its leftovers (a saved Sudoku game, the face preference) were evidence of
@@ -123,16 +126,19 @@ c0         = version | salt | m | t | p | GCM_KEK_device( GCM_KEK_code( DEK ) )
     Dictionary, on both editions). The enabled alias, the face preference and the notepad's
     own (non-secret) notes are visible to the system and in a storage image, and the manifest
     and resources of either APK name "Kanaiic Reader". Switching faces briefly sends the app to
-    the home screen. The application label in system settings is "Kanaiic Reader" on both
-    editions whichever face is chosen, so App info reveals the real name; a fresh install
-    shows the undisguised face until the user switches.
+    the home screen. The application label and icon (App info, the installer, storage and
+    battery screens) are fixed per edition whichever face is chosen: "Dictionary" with the
+    dictionary icon on direct (1.8+), "Kanaiic Reader" on Play, where App info therefore
+    reveals the real name. A fresh Play install shows its own face until the user switches; a fresh
+    direct install starts as the Dictionary. Until a code is set, the direct front screen
+    shows a welcome message that names the app and the way in; it stops once a code exists.
 11. **Forensic self-test not done.** Brief section 12 asks for a full-storage image after use
     to confirm nothing readable remains (including keyboard dictionaries).
 12. **Play edition is traceable.** Its package id leads to a public listing that describes
     the disguise, and Play keeps an install record in the user's Google account. Its
     disguise only hides the app from a glance. The user guide says so and points people at
-    risk to the direct edition, whose id appears on no store (though its App info label and
-    APK now carry the same name).
+    risk to the direct edition, whose id appears on no store (its App info shows "Dictionary", though
+    the APK itself carries the name "Kanaiic Reader").
 
 13. **PDF tab (1.7).** The Dictionary face's PDF viewer opens files through the system picker
     (ACTION_OPEN_DOCUMENT, read-only, no persisted permission) and renders them with the

@@ -63,10 +63,10 @@ import com.tbce.calc.dictionary.DictionaryStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-private class DictColors(val bg: Color, val field: Color, val text: Color, val dim: Color, val accent: Color, val line: Color)
+private class DictColors(val bg: Color, val field: Color, val text: Color, val dim: Color, val accent: Color, val line: Color, val onAccent: Color = Color.White)
 
 private fun dictColors(dark: Boolean) = if (dark)
-    DictColors(Color(0xFF111316), Color(0xFF1D2025), Color(0xFFE8EAED), Color(0xFF8F949B), Color(0xFF7FA6E8), Color(0xFF2A2E34))
+    DictColors(Color(0xFF111316), Color(0xFF1D2025), Color(0xFFE8EAED), Color(0xFF8F949B), Color(0xFF7FA6E8), Color(0xFF2A2E34), Color(0xFF0E1A2E))
 else
     DictColors(Color(0xFFFCFCFD), Color(0xFFF0F1F4), Color(0xFF1B1D21), Color(0xFF6B7078), Color(0xFF2F5FB3), Color(0xFFE3E5E9))
 
@@ -96,6 +96,8 @@ fun DictionaryScreen(app: AppController) {
     var prevArmed by remember { mutableStateOf(app.armed) }
     val editor = remember { arrayOfNulls<EditText>(1) }
     val pdf = remember { PdfHolder() }
+    // Until a code exists, each launch explains how to set one up and how to get in later.
+    var welcome by remember { mutableStateOf(!app.hasVault()) }
     DisposableEffect(pdf) { onDispose { pdf.close() } }
 
     fun setField(text: String) {
@@ -210,16 +212,18 @@ fun DictionaryScreen(app: AppController) {
                 }
                 Spacer(Modifier.width(8.dp))
                 // Tap looks the word up; a long hold is the hidden gesture (arm, then submit).
-                Text(
-                    "Search",
-                    color = c.accent,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
+                // A filled button, so it reads as something to press and hold, not a label.
+                Box(
+                    Modifier
+                        .height(48.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(c.accent)
                         .faceHoldable(onTap = { search() }, onHold = { app.faceTrigger(field.filter { it.isDigit() }.toByteArray()) })
-                        .padding(horizontal = 12.dp, vertical = 12.dp),
-                )
+                        .padding(horizontal = 20.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("Search", color = c.onAccent, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
 
@@ -255,6 +259,16 @@ fun DictionaryScreen(app: AppController) {
                 }
             }
         }
+    }
+
+    if (welcome && !app.hasVault()) {
+        AlertDialog(
+            onDismissRequest = { welcome = false },
+            title = { Text(app.ui["welcome_title"] ?: "Welcome") },
+            text = { Column(Modifier.verticalScroll(rememberScrollState())) { Text(app.ui["welcome_text"] ?: "") } },
+            confirmButton = { TextButton(onClick = { welcome = false; app.startSetup() }) { Text(app.ui["welcome_setup"] ?: "Set up now") } },
+            dismissButton = { TextButton(onClick = { welcome = false }) { Text(app.ui["welcome_later"] ?: "Later") } },
+        )
     }
 
     if (about) {

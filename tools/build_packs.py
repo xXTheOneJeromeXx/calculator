@@ -93,6 +93,10 @@ UI = {
     "how_title": "How to open the app",
     "how_dictionary": "As Dictionary: hold Search until the box clears, type your code in the box, then hold Search again.",
     "how_reader": "As Kanaiic Reader: type your code on the number pad and tap Open.",
+    # Shown on the Dictionary face each time it opens until a code is set (direct installs start there).
+    "welcome_title": "Welcome",
+    "welcome_text": "This is Kanaiic Reader, a private Bible reader, disguised as a dictionary.\n\nTo set it up: hold the Search button for about two seconds and the setup screen opens. Choose a code of at least 6 digits.\n\nAfterwards, to open the reader: hold Search until the box clears, type your code in the box, then hold Search again. A normal tap of Search just looks a word up. These steps are always in the reader's Settings, where you can also switch to the app's own name and icon.\n\nThis message stops appearing once a code is set.",
+    "welcome_setup": "Set up now", "welcome_later": "Later",
     # Offered once, right after a code is first set on the app's own face.
     "offer_title": "Disguise the app now?",
     "offer_text": "It can look like an ordinary dictionary on your home screen and in your app list. You can also do this later in Settings > Disguise.",

@@ -8,7 +8,7 @@ import com.tbce.calc.vault.KeyVault
 /**
  * A launcher face: the icon and name the app shows, and the front screen behind it. READER is the
  * app's own face and DICTIONARY the disguise. Both editions have both; a fresh install starts on
- * the first, READER, which is the alias the manifest enables.
+ * the one the manifest enables by default (DICTIONARY on direct, READER on Play).
  */
 enum class Disguise(val label: String, val alias: String) {
     READER("Reader", "FaceReader"),
@@ -52,14 +52,14 @@ object Disguises {
     }
 
     /**
-     * The active face, with its alias made the enabled one. A fresh install starts on the first
-     * face (READER). An install that was disguised stays disguised: a stored face that no longer
-     * exists (Calculator, Notes, Clock and Sudoku were removed in 1.5), or a vault with nothing
-     * stored (before 1.3, Calculator was the default and nothing was stored), moves to the
-     * Dictionary. Every alias is set explicitly whenever one doesn't match, because the manifest's
-     * default changed in 1.6 (FaceReader is now enabled by default, which on its own would add a
-     * second icon to a direct install on the Dictionary) and because a face switched away from
-     * earlier stays disabled across updates.
+     * The active face, with its alias made the enabled one. A fresh install starts on the face
+     * the edition's manifest enables by default. An install that was disguised stays disguised:
+     * a stored face that no longer exists (Calculator, Notes, Clock and Sudoku were removed in
+     * 1.5), or a vault with nothing stored (before 1.3, Calculator was the default and nothing
+     * was stored), moves to the Dictionary. Every alias is set explicitly whenever one doesn't
+     * match, because the manifest's default has changed between versions (FaceReader on direct
+     * in 1.6–1.7, FaceDictionary again from 1.8), which alone would show the wrong icon or two,
+     * and because a face switched away from earlier stays disabled across updates.
      */
     fun current(context: Context): Disguise {
         val faces = available(context)
@@ -70,10 +70,18 @@ object Disguises {
             return face
         }
         val disguised = name != null || KeyVault.existsIn(context.filesDir)
-        val face = if (disguised && Disguise.DICTIONARY in faces) Disguise.DICTIONARY else faces.firstOrNull() ?: Disguise.READER
+        val face = if (disguised && Disguise.DICTIONARY in faces) Disguise.DICTIONARY else faces.firstOrNull { enabledByDefault(context, it) } ?: faces.firstOrNull() ?: Disguise.READER
         set(context, face)
         if (name != null) forgetRemovedFaces(context)
         return face
+    }
+
+    /** Whether the manifest enables [d]'s alias before any setting overrides it. */
+    private fun enabledByDefault(context: Context, d: Disguise): Boolean = try {
+        @Suppress("DEPRECATION")
+        context.packageManager.getActivityInfo(component(context, d), PackageManager.MATCH_DISABLED_COMPONENTS).enabled
+    } catch (_: PackageManager.NameNotFoundException) {
+        false
     }
 
     /** True when [face] is explicitly enabled and every other face explicitly disabled. */

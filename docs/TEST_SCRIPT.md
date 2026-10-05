@@ -23,13 +23,24 @@ off, nothing exported but the two launcher faces.
 
 ## First run and code
 
-1. Fresh install: the icon and name are "Kanaiic Reader"; it opens to "Choose a code".
-2. Enter a code twice (6+ digits): the reader opens and asks "Disguise the app now?".
-3. **Later**: it stays Kanaiic Reader. Settings starts with "How to open the app", and each
-   option under Disguise shows its own way in.
-4. On another fresh install, **Disguise now**: the steps screen, then **Switch to Dictionary**:
-   the app goes to the home screen; the launcher shows only "Dictionary"; holding Search, typing
-   the code and holding Search again opens the reader. The question doesn't come back.
+Direct (`app-direct-*.apk`):
+
+1. Fresh install: the launcher shows only "Dictionary"; App info shows "Dictionary" with the
+   dictionary icon. Opening it shows the Welcome message (Set up now / Later); Search is a
+   filled button.
+2. **Set up now** opens "Choose a code"; so does holding Search after **Later**. The setup
+   hint describes the Search way in. After the code is set the reader opens, with no
+   disguise question. The Welcome message doesn't come back.
+
+Play (`app-play-*.apk`):
+
+3. Fresh install: the launcher and App info show "Kanaiic Reader"; it opens to "Choose a code".
+4. Enter a code twice: the reader opens and asks "Disguise the app now?". **Later**: it stays
+   Kanaiic Reader. Settings starts with "How to open the app", and each option under Disguise
+   shows its own way in.
+5. On another fresh install, **Disguise now**: the steps screen, then **Switch to Dictionary**:
+   the launcher shows only "Dictionary"; holding Search, typing the code and holding Search
+   again opens the reader. The question doesn't come back.
 
 ## Locking
 
@@ -93,4 +104,5 @@ off, nothing exported but the two launcher faces.
    build over it. Within a second, before opening, the launcher lists only `.FaceDictionary`
    (`adb shell cmd package query-activities --brief -a android.intent.action.MAIN -c
    android.intent.category.LAUNCHER`); the old code opens the reader with everything there.
-2. Same on the Kanaiic Reader face: it stays Kanaiic Reader.
+2. Same on the Kanaiic Reader face (direct 1.7 set up and left as Kanaiic Reader): it stays
+   Kanaiic Reader after the update, even though direct now starts as the Dictionary.

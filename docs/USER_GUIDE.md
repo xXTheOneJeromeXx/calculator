@@ -6,19 +6,21 @@ no internet connection, ever.
 
 ## Two versions
 
-Both versions work the same way. They open as **Kanaiic Reader**, with its own name and icon
-and a plain screen asking for your code, and in Settings you can make the app look like a
-dictionary instead. They differ only in where they come from:
+Both versions have the same features and can look either like **Kanaiic Reader** (its own
+name and icon, with a plain screen asking for your code) or like a **dictionary**. You can
+switch between the two in Settings. They differ in how they start and where they come from:
 
-- **From Google Play.** The app's Play Store page describes the dictionary disguise, and
-  anyone who looks at the app's details on the phone can find that page.
-- **Direct** (downloaded from kanaiic.com or GitHub). It is not on any app store, so its
-  details lead nowhere. If being found with a Bible app could put you in danger, use this
-  one, and switch to the dictionary right after setting your code.
+- **From Google Play.** Starts as Kanaiic Reader and offers the dictionary disguise after you
+  set your code. The app's Play Store page describes the disguise, and anyone who looks at the
+  app's details on the phone can find that page.
+- **Direct** (downloaded from kanaiic.com or GitHub). Starts already disguised as the
+  dictionary, and it is not on any app store, so its details lead nowhere. If being found
+  with a Bible app could put you in danger, use this one.
 
-On both, the phone's app settings (Settings > Apps) always list the app as "Kanaiic Reader",
-even while it looks like a dictionary. The disguise hides the app from a glance at the home
-screen and app list, not from someone who checks the app's details.
+The phone's app settings (Settings > Apps) show one fixed name and icon whatever the app looks
+like on the home screen: **"Dictionary"** on the direct version, and **"Kanaiic Reader"** on
+the Google Play version. So on the Play version the disguise hides the app from a glance at
+the home screen and app list, not from someone who checks the app's details.
 
 Please read the section "What it does not protect against" before you rely on it. In some
 places, being found with a hidden Bible app is more dangerous than being found with no Bible
@@ -36,12 +38,14 @@ app at all. Only you can weigh that.
 
 ## Setting up your code
 
-1. Open the app. It asks you to choose a code straight away. (If you updated from a version
-   that started as a dictionary and never set a code, hold **Search** for about two seconds
-   and the setup screen opens.)
+1. Open the app.
+   - **Google Play version:** it asks you to choose a code straight away.
+   - **Direct version:** it opens as a dictionary, with a message explaining how to get in.
+     Tap **Set up now**, or hold the **Search** button for about two seconds; the setup
+     screen opens. The message appears each time until a code is set.
 2. Type a code of at least 6 digits, then the same code again. 8 or more digits is much
    better. Do not use your phone PIN, a birthday, or something like 123456.
-3. The app asks whether to disguise it now. **Disguise now** shows how to open it as a
+3. Google Play version only: the app asks whether to disguise it now. **Disguise now** shows how to open it as a
    dictionary, then switches (the app goes to the home screen). **Later** leaves it as
    Kanaiic Reader; you can switch any time in Settings > Disguise. Either way, Settings always
    shows how to open the app, at the top.
@@ -141,10 +145,10 @@ never deletes or replaces anything.
 
 ## What it protects against
 
-- Direct version: someone looking at your home screen, app list or app settings sees the
-  disguise (for example a dictionary called "Dictionary") with no permissions and no internet
-  access. Kanaiic Reader shows its own name unless you choose a disguise, and its app details
-  still lead to its Play Store page.
+- Direct version, once switched to the dictionary: someone looking at your home screen, app
+  list or app settings sees a dictionary called "Dictionary" with no permissions and no
+  internet access. The Play version's app settings still say Kanaiic Reader and lead to its
+  Play Store page.
 - Someone using the disguise finds an app that works. Wrong codes leave no trace.
 - Someone who copies your phone's storage gets encrypted data. The key is tied to your code
   and to this phone's security chip, so they cannot try codes on another computer.

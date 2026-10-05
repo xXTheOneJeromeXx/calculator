@@ -21,23 +21,35 @@ android {
     defaultConfig {
         minSdk = 24
         targetSdk = 36
-        versionCode = 16
-        versionName = "1.7.0"
+        versionCode = 17
+        versionName = "1.8.0"
     }
 
-    // Two editions from one codebase. They behave the same; only the application id differs,
-    // and it must: a disguised direct install must never point at the public Play listing.
+    // Two editions from one codebase. They behave the same; the application id differs, and it
+    // must: a disguised direct install must never point at the public Play listing. So do the
+    // app-level name and icon (Settings > Apps, the installer): Dictionary on direct, Kanaiic
+    // Reader on Play, and the face a fresh install starts on.
     flavorDimensions += "edition"
     productFlavors {
         // GitHub / kanaiic.com. Its id appears on no store.
         create("direct") {
             dimension = "edition"
             applicationId = "com.tbce.calc"
+            manifestPlaceholders["appLabel"] = "@string/label_dictionary"
+            manifestPlaceholders["appIcon"] = "@drawable/ic_dictionary"
+            // A fresh install starts disguised, as the Dictionary.
+            manifestPlaceholders["readerFace"] = "false"
+            manifestPlaceholders["dictionaryFace"] = "true"
         }
         // Google Play. Its id leads to the public listing, which describes the disguise.
         create("play") {
             dimension = "edition"
             applicationId = "com.kanaiic.reader"
+            manifestPlaceholders["appLabel"] = "@string/label_reader"
+            manifestPlaceholders["appIcon"] = "@drawable/ic_reader"
+            // A fresh install starts as itself; the Dictionary is offered after setup.
+            manifestPlaceholders["readerFace"] = "true"
+            manifestPlaceholders["dictionaryFace"] = "false"
         }
     }
 

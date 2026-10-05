@@ -15,18 +15,19 @@
         android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:hasFragileUserData="false"
-        android:icon="@drawable/ic_reader"
-        android:roundIcon="@drawable/ic_reader"
-        android:label="@string/label_reader"
+        android:icon="${appIcon}"
+        android:roundIcon="${appIcon}"
+        android:label="${appLabel}"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
 
         <!-- The real activity. Not a launcher itself; each face is an activity-alias below.
-             Exactly one alias is enabled at a time, so only one icon and name ever show. Both
-             editions start as the app's own face (FaceReader); the Dictionary disguise is chosen
-             in Settings. The application label above (shown in Settings > Apps) can't follow the
-             face. -->
+             Exactly one alias is enabled at a time, so only one icon and name ever show. Which one
+             a fresh install starts on is set per edition in build.gradle.kts: the Dictionary on
+             direct, the app's own face (FaceReader) on Play. The application name and icon above (Settings > Apps, the installer)
+             can't follow the face; they are set per edition in build.gradle.kts: Dictionary on
+             direct, Kanaiic Reader on Play. -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -38,7 +39,7 @@
             android:name=".FaceReader"
             android:targetActivity=".MainActivity"
             android:exported="true"
-            android:enabled="true"
+            android:enabled="${readerFace}"
             android:icon="@drawable/ic_reader"
             android:roundIcon="@drawable/ic_reader"
             android:label="@string/label_reader">
@@ -52,7 +53,7 @@
             android:name=".FaceDictionary"
             android:targetActivity=".MainActivity"
             android:exported="true"
-            android:enabled="false"
+            android:enabled="${dictionaryFace}"
             android:icon="@drawable/ic_dictionary"
             android:roundIcon="@drawable/ic_dictionary"
             android:label="@string/label_dictionary">
