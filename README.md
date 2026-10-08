@@ -18,7 +18,7 @@ with notes and PDF tabs (to open the reader from it: hold **Search**, type the c
   setup, and shows as "Kanaiic Reader" in the phone's app settings. Its store page describes
   the disguise, so the disguise only hides it from a glance.
 
-Up to 1.4 there were also calculator, notepad, clock and sudoku disguises; those were removed
+Up to 1.4 there were also other disguises; those were removed
 because every extra disguise is one more pattern a searcher can learn to recognise.
 
 It raises the cost of casual and fairly thorough phone inspections. It does not stop

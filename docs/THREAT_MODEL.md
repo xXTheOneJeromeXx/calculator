@@ -29,7 +29,7 @@ the original design brief (sections 2, 4, 5, 6 and 9).
   direct starts as the Dictionary (with a welcome message on the front screen until a code is
   set), Play starts as itself and offers the Dictionary after setup. Both APKs contain the
   name "Kanaiic" since 1.6.
-- One disguise: the Dictionary. Calculator, Notes, Clock and Sudoku (1.0–1.4) were removed in
+- One disguise: the Dictionary. The earlier disguises (1.0–1.4) were removed in
   1.5: each extra face was another known pattern a searcher could
   recognise, and its leftovers (a saved Sudoku game, the face preference) were evidence of
   switching. An install that was disguised stays disguised on update (`UpdateReceiver` on
@@ -37,7 +37,7 @@ the original design brief (sections 2, 4, 5, 6 and 9).
   no stored face, moves to the Dictionary, every alias is set explicitly (FaceReader is the
   manifest default since 1.6), and the Sudoku save is deleted. The launcher can show the
   manifest default for up to about a second after an update, before the receiver runs.
-- Hidden gesture (brief section 4, adapted from the calculator's `=` to the Dictionary's
+- Hidden gesture (brief section 4, adapted from the original disguise's `=` key to the Dictionary's
   Search button): hold Search to arm (the box clears), type the code in the box, hold Search
   again to submit. Typing a non-digit, 15 s, or backgrounding silently disarms; the box clears
   on arm and disarm, and lookups store only headwords that were opened. No haptics, sound or

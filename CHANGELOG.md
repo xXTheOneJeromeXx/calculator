@@ -43,7 +43,7 @@
 
 ## 1.5.0 (2026-10-04): the dictionary is the only disguise
 
-- The calculator, notepad, clock and sudoku disguises are gone. Every disguise someone has
+- The older disguises are gone. Every disguise someone has
   learned about is one they can recognise on a searched phone, so offering several made the
   app easier to find, not harder. The direct version is always the dictionary; Kanaiic Reader
   shows as itself or as the dictionary.
@@ -70,8 +70,8 @@
   the Hebrew file are copyrighted and left out. All of it ships in the encrypted packs (about
   3 MB; the APK is now about 17 MB). The source KJV doesn't tag words that go untranslated, so a few numbers
   (e.g. H853) show only the handful of verses where it does.
-- The setup screen's "anyone watching can see the digits" warning no longer mentions a
-  calculator display.
+- The setup screen's "anyone watching can see the digits" warning no longer mentions the
+  old disguise's display.
 - Builds use less memory (Gradle 2 GB, Kotlin daemon 1 GB).
 
 ## 1.3.0 (2026-10-04): Kanaiic Reader, and a dictionary disguise
@@ -81,7 +81,7 @@
     plain screen asking for your code. Disguises are optional in Settings. Its store page
     describes the disguises, so they only hide it from a glance.
   - **The direct version** (GitHub, kanaiic.com) stays fully disguised and now starts as a
-    dictionary. Phones updated from 1.2 keep the Calculator.
+    dictionary. Phones updated from 1.2 keep the disguise they had.
 - New **Dictionary** disguise: a working offline dictionary and thesaurus built from
   Princeton's WordNet 3.0 (about 147,000 words with definitions, examples, synonyms, related
   words and opposites; "ran" finds run), plus a Notes tab, recent lookups and a word of the
@@ -112,13 +112,13 @@
 
 ## 1.1.0 (2026-10-04): switchable disguises
 
-- Settings > Disguise: choose how the app looks on the home screen — a calculator or a
-  notepad. The icon and name change at once (via launcher activity-aliases); only one shows
+- Settings > Disguise: choose how the app looks on the home screen — the original
+  disguise or a notepad. The icon and name change at once (via launcher activity-aliases); only one shows
   at a time. The reader, code and contents are unchanged.
 - Notes disguise: a plain, working notepad. To open the reader, start a note, hold Done,
   type your code, then hold Done again; a normal tap of Done saves the note. Its own notes
   are ordinary and stored in the clear, so the disguise looks lived-in.
-- The reader's exit button is now a neutral "hide", not a calculator icon.
+- The reader's exit button is now a neutral "hide", not the original disguise's icon.
 - Disguise reminders ship in the encrypted pack; the APK scan still finds no telltale words,
   no permissions, backups off, and only launcher faces exported.
 
@@ -197,7 +197,7 @@ Still to come (0.4): encrypted export/import, wipe options, release hardening.
   decrypted to the app cache while open and deleted on lock.
 - `tools/scan_apk.sh` checks the release APK: no telltale words, no permissions, backups
   off, only the launcher exported. Passes. Release APK: 5.9 MB (packs are 4.7 MB of it).
-- Panic: the calculator button at top left locks with one tap; double-tap anywhere in the
+- Panic: the button at top left locks with one tap; double-tap anywhere in the
   top-left corner still works and no longer blocks the controls under it.
 
 Still to come: recent passages (Q28) with Saved in 0.3; setup-screen wording still readable
@@ -209,9 +209,9 @@ in the APK; failed-attempt counter; Argon2 calibration on a slow phone.
   the status bar. It now reaches about 1 cm below the status bar, and two taps up to
   half a second apart count.
 
-## 0.1.0 (beta 0.1, 2026-10-03): calculator and locked space core
+## 0.1.0 (beta 0.1, 2026-10-03): first disguise and locked space core
 
-- Working calculator: normal precedence, BigDecimal arithmetic (0.1 + 0.2 = 0.3),
+- First disguise, a working arithmetic keypad: normal precedence, BigDecimal arithmetic (0.1 + 0.2 = 0.3),
   percent, plus/minus, chained operations, repeated `=`, live preview, divide-by-zero
   message. Turn the phone sideways for scientific keys (trig in degrees or radians,
   logs, powers, roots, factorial, π, e, parentheses).
@@ -221,7 +221,7 @@ in the APK; failed-attempt counter; Argon2 calibration on a slow phone.
   15 s or leaving the app.
 - Key hierarchy from the brief: Argon2id (64 MiB, t=3, p=1) of the code, wrapped
   again by an Android Keystore key (StrongBox when available). The code is never stored.
-- Placeholder inside: an encrypted scratch pad, "Back to calculator", double-tap the
+- Placeholder inside: an encrypted scratch pad, "Back to the disguise", double-tap the
   top-left corner, 60 s idle lock, and lock on background or screen off. Keys are
   zeroed on lock. Screenshots and the recents thumbnail are blocked while open.
 - "Erase everything" deletes the wrapped key, the Keystore key, and the data.

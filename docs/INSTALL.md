@@ -48,7 +48,7 @@ like any other app.)
 ## Updates
 
 New versions are installed the same way, over the top. Your code and notes stay, and so does
-the disguise you chose: a phone that looks like a dictionary keeps looking like one. Version 1.5 removed the calculator, notepad, clock and sudoku
+the disguise you chose: a phone that looks like a dictionary keeps looking like one. Version 1.5 removed the older
 disguises: if your phone used one, the update turns it into the dictionary (hold **Search**,
 type your code, hold **Search** again).
 

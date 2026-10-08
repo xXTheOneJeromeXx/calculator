@@ -115,7 +115,7 @@ Settings > Disguise switches between the app's own name and icon and the diction
 and name change straight away, and the app returns to the home screen. The reader, your code and everything inside stay
 the same, and the screen reminds you of the way in when you switch.
 
-Earlier versions also offered a calculator, notepad, clock and sudoku game. They were removed
+Earlier versions also offered other disguises. They were removed
 in version 1.5: a disguise someone knows about is easy to recognise, so each extra one was a
 weak point. If your phone used one of them, the update turns it into the dictionary.
 Updating never undoes a disguise: a phone that looks like a dictionary keeps looking like one. Your code
